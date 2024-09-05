@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -18,9 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\microwave-benner.client\microwave-benner.client.esproj">
+    <ProjectReference Include="..\microwave-benner.client\microwave-benner.Client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\microwave-benner.Infra.Ioc\microwave-benner.Infra.Ioc.csproj" />
   </ItemGroup>
 
 </Project>

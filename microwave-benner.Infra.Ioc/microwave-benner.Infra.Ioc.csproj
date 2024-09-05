@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>microwave_benner.Infra.Ioc</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\microwave-benner.Application\microwave-benner.Application.csproj" />
+    <ProjectReference Include="..\microwave-benner.Domain\microwave-benner.Domain.csproj" />
+    <ProjectReference Include="..\microwave-benner.Infra.Data\microwave-benner.Infra.Data.csproj" />
+  </ItemGroup>
+
+</Project>
