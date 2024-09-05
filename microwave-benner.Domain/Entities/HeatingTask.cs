@@ -8,10 +8,8 @@
         public DateTime? startTime { get; private set; }
         public DateTime? pauseTime { get; private set; }
         public DateTime? endTime { get; private set; }
-        public int? heatingProgramId { get; private set; }
+        //public int? heatingProgramId { get; private set; }
 
-
-        // Constructor
         public HeatingTask(int time, int power, DateTime? startTime = null, DateTime? pauseTime = null, DateTime? endTime = null, int? heatingProgramId = null)
         {
             this.time = time;
@@ -19,7 +17,7 @@
             this.startTime = startTime;
             this.pauseTime = pauseTime;
             this.endTime = endTime;
-            this.heatingProgramId = heatingProgramId;
+            //this.heatingProgramId = heatingProgramId;
         }
     }
 }
