@@ -28,6 +28,7 @@ namespace microwave_benner.Infra.Ioc
             services.AddScoped<IStartHeatingTaskUseCase, StartHeatingTaskService>();
             services.AddScoped<IAddTimeToHeatingTaskUseCase, AddTimeToHeatingTaskService>();
             services.AddScoped<IPauseOrCancelHeatingTaskUseCase, PauseOrCancelHeatingTaskService>();
+            services.AddScoped<IResumeHeatingTaskUseCase, ResumeHeatingTaskService>();
 
             return services;
         }

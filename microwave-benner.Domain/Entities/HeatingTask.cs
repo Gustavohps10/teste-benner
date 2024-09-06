@@ -72,7 +72,7 @@
             if (IsFinished())
                 throw new InvalidOperationException("A tarefa já foi concluída e não pode ser retomada.");
 
-            TimeSpan pausedDuration = DateTime.Now - pauseTime.Value;
+            TimeSpan pausedDuration = DateTime.UtcNow - pauseTime.Value;
             startTime = startTime.Value.Add(pausedDuration);
 
             pauseTime = null;
