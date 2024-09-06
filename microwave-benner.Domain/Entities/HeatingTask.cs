@@ -51,19 +51,6 @@
             this.pauseTime = DateTime.UtcNow;
         }
 
-        public void Continue()
-        {
-            if (!this.pauseTime.HasValue)
-            {
-                throw new InvalidOperationException("O aquecimento não está pausado.");
-            }
-            if (this.endTime.HasValue)
-            {
-                throw new InvalidOperationException("O aquecimento já foi finalizado.");
-            }
-            this.pauseTime = null;
-        }
-
         public void Interrupt()
         {
             if (!this.startTime.HasValue)
@@ -77,6 +64,20 @@
             this.endTime = DateTime.UtcNow;
         }
 
+        public void Resume()
+        {
+            if (!pauseTime.HasValue)
+                throw new InvalidOperationException("A tarefa não está pausada e não pode ser retomada.");
+
+            if (IsFinished())
+                throw new InvalidOperationException("A tarefa já foi concluída e não pode ser retomada.");
+
+            TimeSpan pausedDuration = DateTime.Now - pauseTime.Value;
+            startTime = startTime.Value.Add(pausedDuration);
+
+            pauseTime = null;
+        }
+
         public void AddTime()
         {
             if (this.startTime.HasValue && !this.endTime.HasValue)
@@ -88,6 +89,60 @@
             {
                 throw new InvalidOperationException("O aquecimento não está em execução.");
             }
+        }
+
+        //Pegar tempo restante
+        public int GetRemainingTime()
+        {
+
+            if (!startTime.HasValue)
+                return time;
+
+            int elapsedSeconds = 0;
+
+            if (pauseTime.HasValue)
+            {
+                elapsedSeconds = (int)(pauseTime.Value - startTime.Value).TotalSeconds;
+            }
+            else
+            {
+                elapsedSeconds = (int)(DateTime.UtcNow - startTime.Value).TotalSeconds;
+            }
+
+            if (endTime.HasValue)
+                return 0;
+
+            int remainingTime = time - elapsedSeconds;
+
+            return Math.Max(0, remainingTime);
+        }
+
+
+
+        public bool IsRunning()
+        {
+            if (!startTime.HasValue)
+                return false;
+
+            if (pauseTime.HasValue)
+                return false;
+
+            return GetRemainingTime() > 0;
+        }
+
+        
+        public bool IsFinished()
+        {
+            var remainingtime = GetRemainingTime();
+            return endTime.HasValue || remainingtime <= 0;
+        }
+
+        public bool IsPaused()
+        {
+            if (!startTime.HasValue)
+                return false;
+
+            return pauseTime.HasValue;
         }
     }
 }
