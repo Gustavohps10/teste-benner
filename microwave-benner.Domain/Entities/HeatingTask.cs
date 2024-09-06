@@ -76,5 +76,18 @@
             }
             this.endTime = DateTime.UtcNow;
         }
+
+        public void AddTime()
+        {
+            if (this.startTime.HasValue && !this.endTime.HasValue)
+            {
+                // Adiciona o tempo extra se o aquecimento está em execução
+                this.time += 30;
+            }
+            else
+            {
+                throw new InvalidOperationException("O aquecimento não está em execução.");
+            }
+        }
     }
 }
