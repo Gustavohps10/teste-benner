@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microwave-benner.Server", "microwave-benner.Server\microwave-benner.Server.csproj", "{EA73D42A-C830-46C9-AC0D-F327B1678D5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microwave-benner.API", "microwave-benner.Server\microwave-benner.API.csproj", "{EA73D42A-C830-46C9-AC0D-F327B1678D5D}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "microwave-benner.Client", "microwave-benner.client\microwave-benner.Client.esproj", "{D9932E76-CF1C-43E6-8910-032E4131EBC8}"
 EndProject

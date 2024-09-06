@@ -10,7 +10,7 @@
         public DateTime? endTime { get; private set; }
         //public int? heatingProgramId { get; private set; }
 
-        public HeatingTask(int time, int power, DateTime? startTime = null, DateTime? pauseTime = null, DateTime? endTime = null, int? heatingProgramId = null)
+        public HeatingTask(int time, int power, DateTime? startTime = null, DateTime? pauseTime = null, DateTime? endTime = null)
         {
             this.time = time;
             this.power = power;
