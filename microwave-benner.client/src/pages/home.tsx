@@ -1,7 +1,9 @@
+import { startHeatingTask } from '@/api/start-heating-task';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { heatingTaskReducer } from '@/reducers/heatingTask';
 import { secondsToHms } from '@/utils/secondsToHms';
+import { useMutation } from '@tanstack/react-query';
 import { useReducer, useEffect, useState } from 'react';
 
 export function Home() {
@@ -11,8 +13,11 @@ export function Home() {
     isRunning: false,
     isPaused: false,
   });
-
   const [textTime, setTextTime] = useState('');
+
+  const { mutateAsync: startHeatingTaskFn, isPending, isError, error } = useMutation({
+    mutationFn: startHeatingTask,
+  });
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -30,13 +35,7 @@ export function Home() {
     return () => clearInterval(timer);
   }, [state.isRunning, state.isPaused, state.time]);
 
-  function handleDigitClick(digit: number) {
-    if (!state.isRunning && !state.isPaused) {
-      setTextTime((prev) => prev + digit);
-    }
-  }
-
-  function handleStartHeating() {
+  async function handleStartHeating() {
     if (state.isPaused) {
       dispatch({ type: 'RESUME' });
       return;
@@ -47,7 +46,20 @@ export function Home() {
     const parsedTime = Number(textTime);
     if (parsedTime > 0) {
       dispatch({ type: 'SET_TIME', payload: parsedTime });
-      dispatch({ type: 'START' });
+
+      try {
+        const heatingTaskResponse =  await startHeatingTaskFn({
+          power: state.power,
+          time: parsedTime,
+          // heatingProgramId: null, 
+        });
+
+        dispatch({ type: 'START' });
+        console.log(heatingTaskResponse);
+        
+      } catch (err) {
+        console.error('Erro ao iniciar aquecimento:', err);
+      }
     }
   }
 
@@ -65,6 +77,12 @@ export function Home() {
 
   function handleChangePower(value: number) {
     dispatch({ type: 'SET_POWER', payload: value });
+  }
+
+  function handleDigitClick(digit: number) {
+    if (!state.isRunning && !state.isPaused) {
+      setTextTime((prev) => prev + digit);
+    }
   }
 
   return (
@@ -94,8 +112,8 @@ export function Home() {
           <Button size="lg" variant="secondary" onClick={() => handleDigitClick(0)}>
             0
           </Button>
-          <Button size="lg" variant="outline" onClick={handleStartHeating}>
-            Play
+          <Button size="lg" variant="outline" onClick={handleStartHeating} disabled={isPending}>
+            {isPending ? 'Starting...' : 'Play'}
           </Button>
           <Button size="lg" variant="destructive" onClick={handleCancelOrPause}>
             {state.isPaused ? 'Cancel' : 'Pause'}
@@ -112,6 +130,8 @@ export function Home() {
             onValueChange={(value) => handleChangePower(value[0])}
           />
         </div>
+
+        {isError && <div className="text-red-500 mt-4">Error: {error instanceof Error ? error.message : 'Unknown error'}</div>}
       </div>
     </div>
   );
