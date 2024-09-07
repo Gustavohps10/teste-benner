@@ -39,6 +39,7 @@ namespace microwave_benner.Infra.Ioc
 
             //Heating Programs
             services.AddScoped<ICreateHeatingProgramUseCase, CreateHeatingProgramService>();
+            services.AddScoped<IReadAllHeatingProgramsUseCase, ReadAllHeatingProgramsService>();
 
             return services;
         }
