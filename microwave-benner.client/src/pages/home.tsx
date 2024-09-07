@@ -1,4 +1,5 @@
 import { pauseOrCancelHeatingTask } from '@/api/pause-or-cancel-heating-task';
+import { resumeHeatingTask } from '@/api/resume-heating-task';
 import { startHeatingTask } from '@/api/start-heating-task';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -24,6 +25,10 @@ export function Home() {
     mutationFn: pauseOrCancelHeatingTask,
   });
 
+  const { mutateAsync: resumeHeatingTaskFn, isPending: isResuming, isError: resumeError, error: resumeErrorMsg } = useMutation({
+    mutationFn: resumeHeatingTask,
+  });
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (state.isRunning && !state.isPaused) {
@@ -42,7 +47,14 @@ export function Home() {
 
   async function handleStartHeating() {
     if (state.isPaused) {
-      dispatch({ type: 'RESUME' });
+      if (state.id) {
+        try {
+          await resumeHeatingTaskFn(state.id);
+          dispatch({ type: 'RESUME' });
+        } catch (err) {
+          console.error('Erro ao retomar aquecimento:', err);
+        }
+      }
       return;
     }
 
@@ -53,14 +65,13 @@ export function Home() {
       dispatch({ type: 'SET_TIME', payload: parsedTime });
 
       try {
-        const heatingTaskResponse =  await startHeatingTaskFn({
+        const heatingTaskResponse = await startHeatingTaskFn({
           power: state.power,
           time: parsedTime,
         });
 
         dispatch({ type: 'SET_TASK', payload: heatingTaskResponse });
         dispatch({ type: 'START' });
-        
       } catch (err) {
         console.error('Erro ao iniciar aquecimento:', err);
       }
@@ -69,7 +80,7 @@ export function Home() {
 
   async function handleCancelOrPause() {
     if (!state.id) {
-      console.warn('ID de aquecimento não encontrado');
+      setTextTime('');
       return;
     }
 
@@ -83,7 +94,7 @@ export function Home() {
       if (state.isPaused || (!state.isRunning && textTime)) {
         await pauseOrCancelHeatingTaskFn(state.id); 
         dispatch({ type: 'STOP' });
-        setTextTime(''); 
+        setTextTime('');
       }
     } catch (err) {
       console.error('Erro ao pausar ou cancelar aquecimento:', err);
@@ -128,7 +139,7 @@ export function Home() {
             0
           </Button>
           <Button size="lg" variant="outline" onClick={handleStartHeating} disabled={isStarting}>
-            {isStarting ? 'Starting...' : 'Play'}
+            {isStarting ? 'Starting...' : state.isPaused ? 'Resume' : 'Play'}
           </Button>
           <Button size="lg" variant="destructive" onClick={handleCancelOrPause} disabled={isPausingOrCancelling}>
             {isPausingOrCancelling ? 'Pausing/Canceling...' : state.isPaused ? 'Cancel' : 'Pause'}
@@ -148,6 +159,7 @@ export function Home() {
 
         {startError && <div className="text-red-500 mt-4">Error: {startErrorMsg instanceof Error ? startErrorMsg.message : 'Unknown error'}</div>}
         {pauseError && <div className="text-red-500 mt-4">Error: {pauseErrorMsg instanceof Error ? pauseErrorMsg.message : 'Unknown error'}</div>}
+        {resumeError && <div className="text-red-500 mt-4">Error: {resumeErrorMsg instanceof Error ? resumeErrorMsg.message : 'Unknown error'}</div>}
       </div>
     </div>
   );
