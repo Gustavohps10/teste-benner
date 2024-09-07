@@ -8,11 +8,11 @@ namespace microwave_benner.Server.Controllers
     [ApiController]
     public class PauseOrCancelHeatingTaskController : ControllerBase
     {
-        private readonly IPauseOrCancelHeatingTaskUseCase _pauseOrCancelHeatingTaskUseCase;
+        private readonly IPauseOrCancelHeatingTaskUseCase _pauseOrCancelHeatingTaskService;
 
-        public PauseOrCancelHeatingTaskController(IPauseOrCancelHeatingTaskUseCase pauseOrCancelHeatingTaskUseCase)
+        public PauseOrCancelHeatingTaskController(IPauseOrCancelHeatingTaskUseCase pauseOrCancelHeatingTaskService)
         {
-            _pauseOrCancelHeatingTaskUseCase = pauseOrCancelHeatingTaskUseCase;
+            _pauseOrCancelHeatingTaskService = pauseOrCancelHeatingTaskService;
         }
 
         [HttpPost("pause-or-cancel")]
@@ -25,7 +25,7 @@ namespace microwave_benner.Server.Controllers
 
             try
             {
-                await _pauseOrCancelHeatingTaskUseCase.Execute(heatingTaskDTO);
+                await _pauseOrCancelHeatingTaskService.Execute(heatingTaskDTO);
                 return Ok();
             }
             catch (Exception ex)

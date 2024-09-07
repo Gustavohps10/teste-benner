@@ -8,11 +8,11 @@ namespace microwave_benner.Server.Controllers
     [ApiController]
     public class AddTimeToHeatingTaskController : ControllerBase
     {
-        private readonly IAddTimeToHeatingTaskUseCase _addTimeToHeatingTaskUseCase;
+        private readonly IAddTimeToHeatingTaskUseCase _addTimeToHeatingTaskService;
 
-        public AddTimeToHeatingTaskController(IAddTimeToHeatingTaskUseCase addTimeToHeatingTaskUseCase)
+        public AddTimeToHeatingTaskController(IAddTimeToHeatingTaskUseCase addTimeToHeatingTaskService)
         {
-            _addTimeToHeatingTaskUseCase = addTimeToHeatingTaskUseCase;
+            _addTimeToHeatingTaskService = addTimeToHeatingTaskService;
         }
 
         [HttpPatch("add-time")]
@@ -20,7 +20,7 @@ namespace microwave_benner.Server.Controllers
         {
             try
             {
-                await _addTimeToHeatingTaskUseCase.Execute(heatingTaskDTO);
+                await _addTimeToHeatingTaskService.Execute(heatingTaskDTO);
                 return Ok();
             }
             catch (Exception ex)

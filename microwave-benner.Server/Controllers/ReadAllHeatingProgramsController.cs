@@ -10,17 +10,17 @@ namespace microwave_benner.API.Controllers
     [Route("api/programs")]
     public class ReadAllHeatingProgramsController : ControllerBase
     {
-        private readonly IReadAllHeatingProgramsUseCase _readAllHeatingProgramsUseCase;
+        private readonly IReadAllHeatingProgramsUseCase _readAllHeatingProgramsService;
 
-        public ReadAllHeatingProgramsController(IReadAllHeatingProgramsUseCase readAllHeatingProgramsUseCase)
+        public ReadAllHeatingProgramsController(IReadAllHeatingProgramsUseCase readAllHeatingProgramsService)
         {
-            _readAllHeatingProgramsUseCase = readAllHeatingProgramsUseCase;
+            _readAllHeatingProgramsService = readAllHeatingProgramsService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<HeatingProgram>>> Handle()
         {
-            var programs = await _readAllHeatingProgramsUseCase.Execute();
+            var programs = await _readAllHeatingProgramsService.Execute();
             return Ok(programs);
         }
     }
