@@ -4,7 +4,7 @@ using microwave_benner.Application.UseCases;
 
 namespace microwave_benner.Server.Controllers
 {
-    [Route("api/heating")]
+    [Route("api/heatings")]
     [ApiController]
     public class PauseOrCancelHeatingTaskController : ControllerBase
     {
@@ -15,7 +15,7 @@ namespace microwave_benner.Server.Controllers
             _pauseOrCancelHeatingTaskService = pauseOrCancelHeatingTaskService;
         }
 
-        [HttpPost("pause-or-cancel")]
+        [HttpPost("pause")]
         public async Task<IActionResult> Handle([FromBody] HeatingTaskDTO heatingTaskDTO)
         {
             if (!ModelState.IsValid)

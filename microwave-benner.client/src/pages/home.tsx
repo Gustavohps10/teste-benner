@@ -1,3 +1,4 @@
+import { pauseOrCancelHeatingTask } from '@/api/pause-or-cancel-heating-task';
 import { startHeatingTask } from '@/api/start-heating-task';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -15,8 +16,12 @@ export function Home() {
   });
   const [textTime, setTextTime] = useState('');
 
-  const { mutateAsync: startHeatingTaskFn, isPending, isError, error } = useMutation({
+  const { mutateAsync: startHeatingTaskFn, isPending: isStarting, isError: startError, error: startErrorMsg } = useMutation({
     mutationFn: startHeatingTask,
+  });
+
+  const { mutateAsync: pauseOrCancelHeatingTaskFn, isPending: isPausingOrCancelling, isError: pauseError, error: pauseErrorMsg } = useMutation({
+    mutationFn: pauseOrCancelHeatingTask,
   });
 
   useEffect(() => {
@@ -51,7 +56,6 @@ export function Home() {
         const heatingTaskResponse =  await startHeatingTaskFn({
           power: state.power,
           time: parsedTime,
-          // heatingProgramId: null, 
         });
 
         dispatch({ type: 'SET_TASK', payload: heatingTaskResponse });
@@ -63,15 +67,26 @@ export function Home() {
     }
   }
 
-  function handleCancelOrPause() {
-    if (state.isRunning && !state.isPaused) {
-      dispatch({ type: 'PAUSE' });
+  async function handleCancelOrPause() {
+    if (!state.id) {
+      console.warn('ID de aquecimento não encontrado');
       return;
     }
 
-    if (state.isPaused || (!state.isRunning && textTime)) {
-      dispatch({ type: 'STOP' });
-      setTextTime('');
+    try {
+      if (state.isRunning && !state.isPaused) {
+        await pauseOrCancelHeatingTaskFn(state.id);
+        dispatch({ type: 'PAUSE' });
+        return;
+      }
+
+      if (state.isPaused || (!state.isRunning && textTime)) {
+        await pauseOrCancelHeatingTaskFn(state.id); 
+        dispatch({ type: 'STOP' });
+        setTextTime(''); 
+      }
+    } catch (err) {
+      console.error('Erro ao pausar ou cancelar aquecimento:', err);
     }
   }
 
@@ -112,11 +127,11 @@ export function Home() {
           <Button size="lg" variant="secondary" onClick={() => handleDigitClick(0)}>
             0
           </Button>
-          <Button size="lg" variant="outline" onClick={handleStartHeating} disabled={isPending}>
-            {isPending ? 'Starting...' : 'Play'}
+          <Button size="lg" variant="outline" onClick={handleStartHeating} disabled={isStarting}>
+            {isStarting ? 'Starting...' : 'Play'}
           </Button>
-          <Button size="lg" variant="destructive" onClick={handleCancelOrPause}>
-            {state.isPaused ? 'Cancel' : 'Pause'}
+          <Button size="lg" variant="destructive" onClick={handleCancelOrPause} disabled={isPausingOrCancelling}>
+            {isPausingOrCancelling ? 'Pausing/Canceling...' : state.isPaused ? 'Cancel' : 'Pause'}
           </Button>
         </div>
 
@@ -131,7 +146,8 @@ export function Home() {
           />
         </div>
 
-        {isError && <div className="text-red-500 mt-4">Error: {error instanceof Error ? error.message : 'Unknown error'}</div>}
+        {startError && <div className="text-red-500 mt-4">Error: {startErrorMsg instanceof Error ? startErrorMsg.message : 'Unknown error'}</div>}
+        {pauseError && <div className="text-red-500 mt-4">Error: {pauseErrorMsg instanceof Error ? pauseErrorMsg.message : 'Unknown error'}</div>}
       </div>
     </div>
   );

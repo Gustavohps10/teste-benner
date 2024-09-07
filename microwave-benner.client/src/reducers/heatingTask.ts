@@ -13,7 +13,7 @@ type HeatingTaskAction =
   | { type: 'STOP' }
   | { type: 'SET_TIME'; payload: number }
   | { type: 'SET_POWER'; payload: number }
-  | { type: 'SET_TASK'; payload: HeatingTask };  // Atualizando HeatingTask completa, incluindo o id
+  | { type: 'SET_TASK'; payload: HeatingTask };
 
 export function heatingTaskReducer(state: HeatingTask, action: HeatingTaskAction): HeatingTask {
   switch (action.type) {
