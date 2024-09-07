@@ -16,6 +16,8 @@ namespace microwave_benner.Application.DTOs
 
         public DateTime? pauseTime { get; set; }
 
-        public DateTime? endTime { get; set; } 
+        public DateTime? endTime { get; set; }
+
+        public int? heatingProgramId { get; set; }
     }
 }

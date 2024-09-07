@@ -14,20 +14,37 @@ namespace microwave_benner.Application.Services
     public class StartHeatingTaskService : IStartHeatingTaskUseCase
     {
         private readonly IHeatingTaskRepository _heatingTaskRepository;
+        private readonly IHeatingProgramRepository _heatingProgramRepository;
         private readonly IMapper _mapper;
 
-        public StartHeatingTaskService(IHeatingTaskRepository heatingTaskRepository, IMapper mapper)
+        public StartHeatingTaskService(
+            IHeatingTaskRepository heatingTaskRepository,
+            IHeatingProgramRepository heatingProgramRepository,
+            IMapper mapper)
         {
             _heatingTaskRepository = heatingTaskRepository;
+            _heatingProgramRepository = heatingProgramRepository;
             _mapper = mapper;
         }
 
         public async Task Execute(HeatingTaskDTO heatingTaskDTO)
         {
+            if (heatingTaskDTO.heatingProgramId.HasValue)
+            {
+                HeatingProgram? heatingProgram = await _heatingProgramRepository.GetById(heatingTaskDTO.heatingProgramId.Value);
+
+                if (heatingProgram == null)
+                {
+                    throw new ArgumentException("HeatingProgram não encontrado.");
+                }
+
+                heatingTaskDTO.time = heatingTaskDTO.time ?? heatingProgram.time;
+                heatingTaskDTO.power = heatingTaskDTO.power ?? heatingProgram.power;
+            }
 
             HeatingTask heatingTask = _mapper.Map<HeatingTask>(heatingTaskDTO);
-            heatingTask.Start();
 
+            heatingTask.Start();
             await _heatingTaskRepository.Insert(heatingTask);
         }
     }
