@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\microwave-benner.client\microwave-benner.Client.esproj">
+    <ProjectReference Include="..\microwave-benner.client\microwave-benner.UI.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\microwave-benner.Infra.Ioc\microwave-benner.Infra.Ioc.csproj" />

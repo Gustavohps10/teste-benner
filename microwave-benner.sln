@@ -5,15 +5,15 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microwave-benner.API", "microwave-benner.Server\microwave-benner.API.csproj", "{EA73D42A-C830-46C9-AC0D-F327B1678D5D}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "microwave-benner.Client", "microwave-benner.client\microwave-benner.Client.esproj", "{D9932E76-CF1C-43E6-8910-032E4131EBC8}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "microwave-benner.UI", "microwave-benner.client\microwave-benner.UI.esproj", "{D9932E76-CF1C-43E6-8910-032E4131EBC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microwave-benner.Domain", "microwave-benner.Domain\microwave-benner.Domain.csproj", "{27C77AD1-32A8-4E8E-8A9B-0B9D718F7F46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microwave-benner.Domain", "microwave-benner.Domain\microwave-benner.Domain.csproj", "{27C77AD1-32A8-4E8E-8A9B-0B9D718F7F46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microwave-benner.Infra.Data", "microwave-benner.Infra.Data\microwave-benner.Infra.Data.csproj", "{65E15EF3-261B-4D46-B9D7-2C10DBA807B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microwave-benner.Infra.Data", "microwave-benner.Infra.Data\microwave-benner.Infra.Data.csproj", "{65E15EF3-261B-4D46-B9D7-2C10DBA807B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microwave-benner.Infra.Ioc", "microwave-benner.Infra.Ioc\microwave-benner.Infra.Ioc.csproj", "{DB94D452-D4DE-4131-9AF2-34890069A36E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microwave-benner.Infra.Ioc", "microwave-benner.Infra.Ioc\microwave-benner.Infra.Ioc.csproj", "{DB94D452-D4DE-4131-9AF2-34890069A36E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "microwave-benner.Application", "microwave-benner.Application\microwave-benner.Application.csproj", "{A3901C8C-F96A-44BE-AD9A-AB43B78DD9AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "microwave-benner.Application", "microwave-benner.Application\microwave-benner.Application.csproj", "{A3901C8C-F96A-44BE-AD9A-AB43B78DD9AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
