@@ -5,6 +5,6 @@ namespace microwave_benner.Application.UseCases
 {
     public interface IStartHeatingTaskUseCase
     {
-        Task Execute(HeatingTaskDTO heatingTaskDTO);
+        Task<HeatingTaskDTO> Execute(HeatingTaskDTO heatingTaskDTO);
     }
 }

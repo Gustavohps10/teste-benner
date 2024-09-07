@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using microwave_benner.Application.DTOs;
 using microwave_benner.Application.UseCases;
+using System.Threading.Tasks;
 
 namespace microwave_benner.Server.Controllers
 {
-    [Route("api/heating")]
+    [Route("api/heatings")]
     [ApiController]
     public class StartHeatingTaskController : ControllerBase
     {
@@ -16,7 +17,7 @@ namespace microwave_benner.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> handle([FromBody] HeatingTaskDTO heatingTaskDTO)
+        public async Task<IActionResult> Handle([FromBody] HeatingTaskDTO heatingTaskDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -25,12 +26,12 @@ namespace microwave_benner.Server.Controllers
 
             try
             {
-                await _startHeatingTaskService.Execute(heatingTaskDTO);
-                return Ok();
+                HeatingTaskDTO responseDTO = await _startHeatingTaskService.Execute(heatingTaskDTO);
+                return Ok(responseDTO);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Erro ao iniciar o aquecimento.");
+                return StatusCode(500, "Ocorreu um erro ao processar sua solicitação.");
             }
         }
     }

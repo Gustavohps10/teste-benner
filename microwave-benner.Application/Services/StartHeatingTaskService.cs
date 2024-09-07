@@ -1,13 +1,10 @@
-﻿using microwave_benner.Application.UseCases;
+﻿using microwave_benner.Application.DTOs;
 using microwave_benner.Domain.Entities;
 using microwave_benner.Domain.Interfaces;
 using AutoMapper;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using microwave_benner.Application.DTOs;
+using microwave_benner.Application.UseCases;
 
 namespace microwave_benner.Application.Services
 {
@@ -27,7 +24,7 @@ namespace microwave_benner.Application.Services
             _mapper = mapper;
         }
 
-        public async Task Execute(HeatingTaskDTO heatingTaskDTO)
+        public async Task<HeatingTaskDTO> Execute(HeatingTaskDTO heatingTaskDTO)
         {
             if (heatingTaskDTO.heatingProgramId.HasValue)
             {
@@ -35,7 +32,7 @@ namespace microwave_benner.Application.Services
 
                 if (heatingProgram == null)
                 {
-                    throw new ArgumentException("HeatingProgram não encontrado.");
+                    throw new ArgumentException("Programa de aquecimento não encontrado.");
                 }
 
                 heatingTaskDTO.time = heatingTaskDTO.time ?? heatingProgram.time;
@@ -43,9 +40,12 @@ namespace microwave_benner.Application.Services
             }
 
             HeatingTask heatingTask = _mapper.Map<HeatingTask>(heatingTaskDTO);
-
             heatingTask.Start();
             await _heatingTaskRepository.Insert(heatingTask);
+
+            // Mapear HeatingTask para HeatingTaskDTO
+            HeatingTaskDTO responseDTO = _mapper.Map<HeatingTaskDTO>(heatingTask);
+            return responseDTO;
         }
     }
 }
