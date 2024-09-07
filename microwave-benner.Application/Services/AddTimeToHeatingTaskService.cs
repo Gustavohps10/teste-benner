@@ -4,9 +4,6 @@ using microwave_benner.Application.UseCases;
 using microwave_benner.Domain.Entities;
 using microwave_benner.Domain.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace microwave_benner.Application.Services
@@ -22,21 +19,18 @@ namespace microwave_benner.Application.Services
             _mapper = mapper;
         }
 
-        public async Task Execute(HeatingTaskDTO heatingTaskDTO)
+        public async Task<HeatingTaskDTO> Execute(int id)
         {
-            if (!heatingTaskDTO.id.HasValue)
-            {
-                throw new ArgumentException("ID é necessário para adicionar tempo.");
-            }
-
-            HeatingTask heatingTask = await _heatingTaskRepository.GetById(heatingTaskDTO.id.Value);
+            HeatingTask heatingTask = await _heatingTaskRepository.GetById(id);
             if (heatingTask == null)
             {
                 throw new InvalidOperationException("Tarefa de aquecimento não encontrada.");
             }
 
-            heatingTask.AddTime();
+            heatingTask.AddTime(); 
             await _heatingTaskRepository.Update(heatingTask);
+
+            return _mapper.Map<HeatingTaskDTO>(heatingTask);
         }
     }
 }

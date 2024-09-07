@@ -1,3 +1,4 @@
+import { addTimeToHeatingTask } from '@/api/add-time-to-heating-task';
 import { pauseOrCancelHeatingTask } from '@/api/pause-or-cancel-heating-task';
 import { resumeHeatingTask } from '@/api/resume-heating-task';
 import { startHeatingTask } from '@/api/start-heating-task';
@@ -27,6 +28,10 @@ export function Home() {
 
   const { mutateAsync: resumeHeatingTaskFn, isPending: isResuming, isError: resumeError, error: resumeErrorMsg } = useMutation({
     mutationFn: resumeHeatingTask,
+  });
+  
+  const { mutateAsync: addTimeToHeatingTaskFn, isPending: isAddingTime, isError: addTimeError, error: addTimeErrorMsg } = useMutation({
+    mutationFn: addTimeToHeatingTask,
   });
 
   useEffect(() => {
@@ -58,19 +63,30 @@ export function Home() {
       return;
     }
 
-    if (state.isRunning) return;
+    if (state.isRunning) {
+      // Adiciona 30 segundos ao tempo restante
+      if (state.id) {
+        try {
+          await addTimeToHeatingTaskFn(state.id); // Certifique-se de que addTimeToHeatingTaskFn está definido
+          dispatch({ type: 'SET_TIME', payload: state.time + 30 });
+        } catch (err) {
+          console.error('Erro ao adicionar tempo ao aquecimento:', err);
+        }
+      }
+      return;
+    }
 
     const parsedTime = Number(textTime);
     if (parsedTime > 0) {
       dispatch({ type: 'SET_TIME', payload: parsedTime });
 
       try {
-        const heatingTaskResponse = await startHeatingTaskFn({
+        const startheatingTaskResponse = await startHeatingTaskFn({
           power: state.power,
           time: parsedTime,
         });
 
-        dispatch({ type: 'SET_TASK', payload: heatingTaskResponse });
+        dispatch({ type: 'SET_TASK', payload: startheatingTaskResponse });
         dispatch({ type: 'START' });
       } catch (err) {
         console.error('Erro ao iniciar aquecimento:', err);

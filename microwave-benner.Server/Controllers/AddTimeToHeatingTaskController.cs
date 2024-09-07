@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using microwave_benner.Application.DTOs;
 using microwave_benner.Application.UseCases;
+using System;
+using System.Threading.Tasks;
 
 namespace microwave_benner.Server.Controllers
 {
-    [Route("api/heating")]
+    [Route("api/heatings")]
     [ApiController]
     public class AddTimeToHeatingTaskController : ControllerBase
     {
@@ -15,13 +17,13 @@ namespace microwave_benner.Server.Controllers
             _addTimeToHeatingTaskService = addTimeToHeatingTaskService;
         }
 
-        [HttpPatch("add-time")]
-        public async Task<IActionResult> handle([FromBody] HeatingTaskDTO heatingTaskDTO)
+        [HttpPost("{id}/add-time")]
+        public async Task<IActionResult> AddTimeToHeatingTask(int id)
         {
             try
             {
-                await _addTimeToHeatingTaskService.Execute(heatingTaskDTO);
-                return Ok();
+                HeatingTaskDTO heatingTaskDTO = await _addTimeToHeatingTaskService.Execute(id);
+                return Ok(heatingTaskDTO);
             }
             catch (Exception ex)
             {
