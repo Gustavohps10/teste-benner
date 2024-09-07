@@ -1,9 +1,8 @@
-﻿using microwave_benner.Application.UseCases;
+﻿using microwave_benner.Application.DTOs;
+using microwave_benner.Application.UseCases;
 using microwave_benner.Domain.Interfaces;
+using AutoMapper;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace microwave_benner.Application.Services
@@ -11,13 +10,17 @@ namespace microwave_benner.Application.Services
     public class ResumeHeatingTaskService : IResumeHeatingTaskUseCase
     {
         private readonly IHeatingTaskRepository _heatingTaskRepository;
+        private readonly IMapper _mapper;
 
-        public ResumeHeatingTaskService(IHeatingTaskRepository heatingTaskRepository)
+        public ResumeHeatingTaskService(
+            IHeatingTaskRepository heatingTaskRepository,
+            IMapper mapper)
         {
             _heatingTaskRepository = heatingTaskRepository;
+            _mapper = mapper;
         }
 
-        public async Task Execute(int id)
+        public async Task<HeatingTaskDTO> Execute(int id)
         {
             var heatingTask = await _heatingTaskRepository.GetById(id);
             if (heatingTask == null)
@@ -39,6 +42,8 @@ namespace microwave_benner.Application.Services
             {
                 throw new InvalidOperationException("A tarefa já está em execução.");
             }
+
+            return _mapper.Map<HeatingTaskDTO>(heatingTask);
         }
     }
 }

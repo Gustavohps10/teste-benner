@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using microwave_benner.Application.DTOs;
 
 namespace microwave_benner.Application.UseCases
 {
     public interface IResumeHeatingTaskUseCase
     {
-        Task Execute(int id);
+        Task<HeatingTaskDTO> Execute(int id);
     }
-
 }

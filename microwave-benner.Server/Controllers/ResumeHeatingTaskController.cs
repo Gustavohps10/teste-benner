@@ -3,7 +3,7 @@ using microwave_benner.Application.UseCases;
 
 namespace microwave_benner.Server.Controllers
 {
-    [Route("api/heating")]
+    [Route("api/heatings")]
     [ApiController]
     public class ResumeHeatingTaskController : ControllerBase
     {
@@ -14,8 +14,8 @@ namespace microwave_benner.Server.Controllers
             _resumeHeatingTaskService = resumeHeatingTaskService;
         }
 
-        [HttpPost("resume")]
-        public async Task<IActionResult> ResumeHeatingTask([FromBody] int id)
+        [HttpPost("resume/{id}")]
+        public async Task<IActionResult> ResumeHeatingTask(int id)
         {
             try
             {
