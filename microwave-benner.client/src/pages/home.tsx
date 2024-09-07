@@ -1,17 +1,18 @@
-import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
-import { useEffect, useState } from "react";
-import { secondsToHms } from "@/utils/secondsToHms";
+import { useEffect, useState } from 'react'
+
+import { Button } from '@/components/ui/button'
+import { Slider } from '@/components/ui/slider'
+import { secondsToHms } from '@/utils/secondsToHms'
 
 export function Home() {
-  const [time, setTime] = useState(0);
-  const [textTime, setTextTime] = useState('');
-  const [power, setPower] = useState([5]);
-  const [isRunning, setIsRunning] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  const [time, setTime] = useState(0)
+  const [textTime, setTextTime] = useState('')
+  const [power, setPower] = useState([5])
+  const [isRunning, setIsRunning] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: NodeJS.Timeout
     if (isRunning && !isPaused) {
       timer = setInterval(() => {
         setTime((state) => {
@@ -19,10 +20,10 @@ export function Home() {
             clearInterval(timer)
             setIsRunning(false)
             setTextTime('')
-            return 0;
+            return 0
           }
           return state - 1
-        });
+        })
       }, 1000)
     }
 
@@ -39,12 +40,12 @@ export function Home() {
     if (isPaused) {
       setIsRunning(true)
       setIsPaused(false)
-      return;
+      return
     }
 
-    if (isRunning) return;
+    if (isRunning) return
 
-    const parsedTime = Number(textTime);
+    const parsedTime = Number(textTime)
     if (parsedTime > 0) {
       setTime(parsedTime)
       setIsRunning(true)
@@ -97,7 +98,7 @@ export function Home() {
             Play
           </Button>
           <Button size="lg" variant="destructive" onClick={handleCancelOrPause}>
-            {isPaused ? "Cancel" : "Pause"}
+            {isPaused ? 'Cancel' : 'Pause'}
           </Button>
         </div>
 
@@ -113,5 +114,5 @@ export function Home() {
         </div>
       </div>
     </div>
-  );
+  )
 }
