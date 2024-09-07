@@ -2,6 +2,21 @@ using microwave_benner.Infra.Ioc;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var allowedOrigins = builder.Configuration["AllowedOrigins"] ?? "https://localhost:5173";
+
+// Habilitar CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            policy.WithOrigins(allowedOrigins)
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -16,6 +31,8 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
+
+app.UseCors("AllowSpecificOrigin");
 
 app.UseDefaultFiles();
 app.UseStaticFiles();

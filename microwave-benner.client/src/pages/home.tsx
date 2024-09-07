@@ -3,8 +3,14 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import { secondsToHms } from '@/utils/secondsToHms'
+import { getPrograms } from '@/api/get-programs'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export function Home() {
+  const { data: result } = useQuery({ queryKey: ['programs'], queryFn: getPrograms })
+  console.log(result);
+  
+  
   const [time, setTime] = useState(0)
   const [textTime, setTextTime] = useState('')
   const [power, setPower] = useState([5])
