@@ -2,6 +2,7 @@ interface HeatingTask {
   id?: number;  
   power: number;
   time: number;
+  programId?: number
   isRunning?: boolean;
   isPaused?: boolean;
 }
@@ -13,6 +14,7 @@ type HeatingTaskAction =
   | { type: 'STOP' }
   | { type: 'SET_TIME'; payload: number }
   | { type: 'SET_POWER'; payload: number }
+  | { type: 'SET_PROGRAM_ID'; payload: number }
   | { type: 'SET_TASK'; payload: HeatingTask };
 
 export function heatingTaskReducer(state: HeatingTask, action: HeatingTaskAction): HeatingTask {

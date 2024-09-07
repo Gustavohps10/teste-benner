@@ -2,12 +2,45 @@ import { addTimeToHeatingTask } from '@/api/add-time-to-heating-task';
 import { pauseOrCancelHeatingTask } from '@/api/pause-or-cancel-heating-task';
 import { resumeHeatingTask } from '@/api/resume-heating-task';
 import { startHeatingTask } from '@/api/start-heating-task';
+import { getPrograms, GetProgramsResponse } from '@/api/get-programs';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 import { heatingTaskReducer } from '@/reducers/heatingTask';
 import { secondsToHms } from '@/utils/secondsToHms';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useReducer, useEffect, useState } from 'react';
+
+interface Program {
+  id: number;
+  name: string;
+  food: string;
+  time: number;
+  power: number;
+  heatingChar: string;
+  instructions: string;
+  custom: boolean;
+}
 
 export function Home() {
   const [state, dispatch] = useReducer(heatingTaskReducer, {
@@ -16,8 +49,10 @@ export function Home() {
     isRunning: false,
     isPaused: false,
   });
+  console.log(state);
   const [textTime, setTextTime] = useState('');
   const [infoString, setInfoString] = useState('');
+  const [heatingChar, setHeatingChar] = useState('.');
 
   const { mutateAsync: startHeatingTaskFn, isPending: isStarting, isError: startError, error: startErrorMsg } = useMutation({
     mutationFn: startHeatingTask,
@@ -35,6 +70,11 @@ export function Home() {
     mutationFn: addTimeToHeatingTask,
   });
 
+  const { data: programs } = useQuery<GetProgramsResponse>({
+    queryKey: ['programs'],
+    queryFn: getPrograms
+  });
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (state.isRunning && !state.isPaused) {
@@ -46,17 +86,29 @@ export function Home() {
           setInfoString('Aquecimento concluído');
           setTextTime('');
         } else {
-          const charGroup =  '.'.repeat(state.power) + ' '
-          const formatedChars = charGroup.repeat(state.time - 1)
+          const charGroup = heatingChar.repeat(state.power) + ' ';
+          const formatedChars = charGroup.repeat(state.time - 1);
           setInfoString(formatedChars);
         }
       }, 1000);
     }
 
     return () => clearInterval(timer);
-  }, [state.isRunning, state.isPaused, state.time, state.power]);
+  }, [state.isRunning, state.isPaused, state.time, state.power, heatingChar]);
 
-  async function handleStartHeating() {
+  async function handleStartHeating(programId?: number) {
+    if (programId && !state.isRunning && !state.isPaused) {
+      try {
+        const startheatingTaskResponse = await startHeatingTaskFn({ heatingProgramId: programId });
+        dispatch({ type: 'SET_TASK', payload: startheatingTaskResponse });
+        dispatch({ type: 'START' });
+      } catch (err) {
+        console.error('Erro ao iniciar aquecimento com programa de pré aquecimento:', err);
+      }
+  
+      return;
+    }
+
     if (state.isPaused) {
       if (state.id) {
         try {
@@ -73,7 +125,7 @@ export function Home() {
       if (state.id) {
         try {
           await addTimeToHeatingTaskFn(state.id);
-          dispatch({ type: 'SET_TIME', payload: state.time + 30 });
+          dispatch({ type: 'SET_TIME', payload: state.time + 30 }); // Aqui adiciona 30 segundos
         } catch (err) {
           console.error('Erro ao adicionar tempo ao aquecimento:', err);
         }
@@ -107,7 +159,8 @@ export function Home() {
       }
     }
   }
-
+  
+  
   async function handleCancelOrPause() {
     if (!state.id) {
       setTextTime('');
@@ -125,6 +178,8 @@ export function Home() {
         await pauseOrCancelHeatingTaskFn(state.id); 
         dispatch({ type: 'STOP' });
         setTextTime('');
+        setHeatingChar('.')
+        setInfoString('')
       }
     } catch (err) {
       console.error('Erro ao pausar ou cancelar aquecimento:', err);
@@ -138,6 +193,13 @@ export function Home() {
   function handleDigitClick(digit: number) {
     if (!state.isRunning && !state.isPaused) {
       setTextTime((prev) => prev + digit);
+    }
+  }
+
+  function handleProgramSelection(program: Program) {
+    if(!state.isRunning){
+      setHeatingChar(program.heatingChar);
+      handleStartHeating(program.id);
     }
   }
 
@@ -172,7 +234,7 @@ export function Home() {
           <Button size="lg" variant="secondary" onClick={() => handleDigitClick(0)}>
             0
           </Button>
-          <Button size="lg" variant="outline" onClick={handleStartHeating} disabled={isStarting}>
+          <Button size="lg" variant="outline" onClick={() => handleStartHeating()} disabled={isStarting}>
             {isStarting ? 'Starting...' : state.isPaused ? 'Resume' : 'Play'}
           </Button>
           <Button size="lg" variant="destructive" onClick={handleCancelOrPause} disabled={isPausingOrCancelling}>
@@ -191,9 +253,48 @@ export function Home() {
           />
         </div>
 
-        {startError && <div className="text-red-500 mt-4">Error: {startErrorMsg instanceof Error ? startErrorMsg.message : 'Unknown error'}</div>}
-        {pauseError && <div className="text-red-500 mt-4">Error: {pauseErrorMsg instanceof Error ? pauseErrorMsg.message : 'Unknown error'}</div>}
-        {resumeError && <div className="text-red-500 mt-4">Error: {resumeErrorMsg instanceof Error ? resumeErrorMsg.message : 'Unknown error'}</div>}
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className='mt-4' variant="outline">Pré-configurados</Button>
+          </DialogTrigger>
+          <DialogContent className={"lg:max-w-screen-lg overflow-y-scroll max-h-[95vh]"}>
+            <DialogHeader>
+              <DialogTitle>Programas de aquecimento</DialogTitle>
+              <DialogDescription className='font-semibold'>
+                Selecione um programa de aquecimento
+                <Table>
+                  <TableCaption>Lista de programas pré-configurados.</TableCaption>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[48px]">ID</TableHead>
+                      <TableHead>Nome</TableHead>
+                      <TableHead>Tempo</TableHead>
+                      <TableHead>Potência</TableHead>
+                      <TableHead>Instruções</TableHead>
+                      <TableHead></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {programs?.map((program) => (
+                      <TableRow key={program.id}>
+                        <TableCell>{program.id}</TableCell>
+                        <TableCell>{program.name}</TableCell>
+                        <TableCell>{program.time} s</TableCell>
+                        <TableCell>{program.power}</TableCell>
+                        <TableCell>{program.instructions}</TableCell>
+                        <TableCell>
+                          <DialogClose asChild>
+                            <Button onClick={() => handleProgramSelection(program)}>Selecionar</Button>
+                          </DialogClose>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
