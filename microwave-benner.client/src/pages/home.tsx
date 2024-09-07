@@ -62,12 +62,11 @@ export function Home() {
       }
       return;
     }
-
+  
     if (state.isRunning) {
-      // Adiciona 30 segundos ao tempo restante
       if (state.id) {
         try {
-          await addTimeToHeatingTaskFn(state.id); // Certifique-se de que addTimeToHeatingTaskFn está definido
+          await addTimeToHeatingTaskFn(state.id);
           dispatch({ type: 'SET_TIME', payload: state.time + 30 });
         } catch (err) {
           console.error('Erro ao adicionar tempo ao aquecimento:', err);
@@ -79,21 +78,30 @@ export function Home() {
     const parsedTime = Number(textTime);
     if (parsedTime > 0) {
       dispatch({ type: 'SET_TIME', payload: parsedTime });
-
+  
       try {
         const startheatingTaskResponse = await startHeatingTaskFn({
           power: state.power,
           time: parsedTime,
         });
-
+  
         dispatch({ type: 'SET_TASK', payload: startheatingTaskResponse });
         dispatch({ type: 'START' });
       } catch (err) {
         console.error('Erro ao iniciar aquecimento:', err);
       }
+    } else {
+      try {
+        const startheatingTaskResponse = await startHeatingTaskFn({});
+  
+        dispatch({ type: 'SET_TASK', payload: startheatingTaskResponse });
+        dispatch({ type: 'START' });
+      } catch (err) {
+        console.error('Erro ao iniciar aquecimento com valores padrão:', err);
+      }
     }
   }
-
+  
   async function handleCancelOrPause() {
     if (!state.id) {
       setTextTime('');
