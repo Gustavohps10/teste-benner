@@ -17,6 +17,7 @@ export function Home() {
     isPaused: false,
   });
   const [textTime, setTextTime] = useState('');
+  const [infoString, setInfoString] = useState('');
 
   const { mutateAsync: startHeatingTaskFn, isPending: isStarting, isError: startError, error: startErrorMsg } = useMutation({
     mutationFn: startHeatingTask,
@@ -42,13 +43,18 @@ export function Home() {
         if (state.time <= 1) {
           clearInterval(timer);
           dispatch({ type: 'STOP' });
+          setInfoString('Aquecimento concluído');
           setTextTime('');
+        } else {
+          const charGroup =  '.'.repeat(state.power) + ' '
+          const formatedChars = charGroup.repeat(state.time - 1)
+          setInfoString(formatedChars);
         }
       }, 1000);
     }
 
     return () => clearInterval(timer);
-  }, [state.isRunning, state.isPaused, state.time]);
+  }, [state.isRunning, state.isPaused, state.time, state.power]);
 
   async function handleStartHeating() {
     if (state.isPaused) {
@@ -62,7 +68,7 @@ export function Home() {
       }
       return;
     }
-  
+
     if (state.isRunning) {
       if (state.id) {
         try {
@@ -78,13 +84,13 @@ export function Home() {
     const parsedTime = Number(textTime);
     if (parsedTime > 0) {
       dispatch({ type: 'SET_TIME', payload: parsedTime });
-  
+
       try {
         const startheatingTaskResponse = await startHeatingTaskFn({
           power: state.power,
           time: parsedTime,
         });
-  
+
         dispatch({ type: 'SET_TASK', payload: startheatingTaskResponse });
         dispatch({ type: 'START' });
       } catch (err) {
@@ -93,7 +99,7 @@ export function Home() {
     } else {
       try {
         const startheatingTaskResponse = await startHeatingTaskFn({});
-  
+
         dispatch({ type: 'SET_TASK', payload: startheatingTaskResponse });
         dispatch({ type: 'START' });
       } catch (err) {
@@ -101,7 +107,7 @@ export function Home() {
       }
     }
   }
-  
+
   async function handleCancelOrPause() {
     if (!state.id) {
       setTextTime('');
@@ -138,7 +144,11 @@ export function Home() {
   return (
     <div className="border rounded-md w-[900px] h-[500px] mx-auto my-20 flex">
       <div className="h-full flex-1 p-6">
-        <div className="border w-full h-full rounded-md"></div>
+        <div className="border w-full h-full rounded-md p-4 overflow-y-auto">
+          <span className="font-bold text-neutral-500 dark:text-neutral-200 text-2xl">
+            {infoString}
+          </span>
+        </div>
       </div>
 
       <div className="border-l w-[280px] p-6">
