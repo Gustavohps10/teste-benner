@@ -8,7 +8,7 @@ namespace microwave_benner.Infra.Data.Context
         public ApplicationDbContext(DbContextOptions options): base(options) {}
 
         public DbSet<HeatingTask> HeatingTasks { get; set; }
-       // public DbSet<HeatingProgram> HeatingPrograms { get; set; }
+        public DbSet<HeatingProgram> HeatingPrograms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

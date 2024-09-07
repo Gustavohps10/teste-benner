@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using microwave_benner.Infra.Data.Context;
@@ -11,9 +12,11 @@ using microwave_benner.Infra.Data.Context;
 namespace microwave_benner.Infra.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240906233125_create_heating_program")]
+    partial class create_heating_program
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,63 +63,6 @@ namespace microwave_benner.Infra.Data.Migrations
                     b.HasKey("id");
 
                     b.ToTable("heatingPrograms", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            custom = false,
-                            food = "Pipoca (de micro-ondas)",
-                            heatingChar = '*',
-                            instructions = "Observar o barulho de estouros do milho, caso houver um intervalo de mais de 10 segundos entre um estouro e outro, interrompa o aquecimento.",
-                            name = "Pipoca",
-                            power = 7,
-                            time = 180
-                        },
-                        new
-                        {
-                            id = 2,
-                            custom = false,
-                            food = "Leite",
-                            heatingChar = '#',
-                            instructions = "Cuidado com aquecimento de líquidos, o choque térmico aliado ao movimento do recipiente pode causar fervura imediata causando risco de queimaduras.",
-                            name = "Leite",
-                            power = 5,
-                            time = 300
-                        },
-                        new
-                        {
-                            id = 3,
-                            custom = false,
-                            food = "Carne em pedaço ou fatias",
-                            heatingChar = '=',
-                            instructions = "Interrompa o processo na metade e vire o conteúdo com a parte de baixo para cima para o descongelamento uniforme.",
-                            name = "Carnes de boi",
-                            power = 4,
-                            time = 840
-                        },
-                        new
-                        {
-                            id = 4,
-                            custom = false,
-                            food = "Frango (qualquer corte)",
-                            heatingChar = '%',
-                            instructions = "Interrompa o processo na metade e vire o conteúdo com a parte de baixo para cima para o descongelamento uniforme.",
-                            name = "Frango",
-                            power = 7,
-                            time = 480
-                        },
-                        new
-                        {
-                            id = 5,
-                            custom = false,
-                            food = "Feijão congelado",
-                            heatingChar = '$',
-                            instructions = "Deixe o recipiente destampado e em casos de plástico, cuidado ao retirar o recipiente pois o mesmo pode perder resistência em altas temperaturas.",
-                            name = "Feijão",
-                            power = 9,
-                            time = 480
-                        });
                 });
 
             modelBuilder.Entity("microwave_benner.Domain.Entities.HeatingTask", b =>

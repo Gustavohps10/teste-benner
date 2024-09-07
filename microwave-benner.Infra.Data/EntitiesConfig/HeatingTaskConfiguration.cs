@@ -14,6 +14,12 @@ namespace microwave_benner.Infra.Data.EntitiesConfig
             builder.Property(x => x.startTime).IsRequired();
             builder.Property(x => x.pauseTime).IsRequired(false);
             builder.Property(x => x.endTime).IsRequired(false);
+            builder.Property(x => x.heatingProgramId).IsRequired(false);
+
+            builder.HasOne(ht => ht.heatingProgram)
+            .WithMany()
+            .HasForeignKey(ht => ht.heatingProgramId)
+            .OnDelete(DeleteBehavior.Restrict);
 
             builder.ToTable("heatingTasks");
         }

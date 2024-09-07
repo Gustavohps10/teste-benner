@@ -8,7 +8,10 @@
         public DateTime? startTime { get; private set; }
         public DateTime? pauseTime { get; private set; }
         public DateTime? endTime { get; private set; }
-        //public int? heatingProgramId { get; private set; }
+
+        //HeatingProgram
+        public int? heatingProgramId { get; private set; }
+        public HeatingProgram? heatingProgram { get; private set; }
 
         // Inicio Rápido
         private const int defaultTime = 30; // Segundos
