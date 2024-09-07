@@ -1,76 +1,70 @@
-import { useEffect, useState } from 'react'
-
-import { Button } from '@/components/ui/button'
-import { Slider } from '@/components/ui/slider'
-import { secondsToHms } from '@/utils/secondsToHms'
-import { getPrograms } from '@/api/get-programs'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+import { heatingTaskReducer } from '@/reducers/heatingTask';
+import { secondsToHms } from '@/utils/secondsToHms';
+import { useReducer, useEffect, useState } from 'react';
 
 export function Home() {
-  const { data: result } = useQuery({ queryKey: ['programs'], queryFn: getPrograms })
-  console.log(result);
-  
-  
-  const [time, setTime] = useState(0)
-  const [textTime, setTextTime] = useState('')
-  const [power, setPower] = useState([5])
-  const [isRunning, setIsRunning] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
+  const [state, dispatch] = useReducer(heatingTaskReducer, {
+    power: 10,
+    time: 0,
+    isRunning: false,
+    isPaused: false,
+  });
+
+  const [textTime, setTextTime] = useState('');
 
   useEffect(() => {
-    let timer: NodeJS.Timeout
-    if (isRunning && !isPaused) {
+    let timer: NodeJS.Timeout;
+    if (state.isRunning && !state.isPaused) {
       timer = setInterval(() => {
-        setTime((state) => {
-          if (state <= 1) {
-            clearInterval(timer)
-            setIsRunning(false)
-            setTextTime('')
-            return 0
-          }
-          return state - 1
-        })
-      }, 1000)
+        dispatch({ type: 'SET_TIME', payload: state.time - 1 });
+        if (state.time <= 1) {
+          clearInterval(timer);
+          dispatch({ type: 'STOP' });
+          setTextTime('');
+        }
+      }, 1000);
     }
 
-    return () => clearInterval(timer)
-  }, [isRunning, isPaused])
+    return () => clearInterval(timer);
+  }, [state.isRunning, state.isPaused, state.time]);
 
-  function writeOnVisor(digit: number) {
-    if (!isRunning && !isPaused) {
-      setTextTime((state) => state + digit)
+  function handleDigitClick(digit: number) {
+    if (!state.isRunning && !state.isPaused) {
+      setTextTime((prev) => prev + digit);
     }
   }
 
   function handleStartHeating() {
-    if (isPaused) {
-      setIsRunning(true)
-      setIsPaused(false)
-      return
+    if (state.isPaused) {
+      dispatch({ type: 'RESUME' });
+      return;
     }
 
-    if (isRunning) return
+    if (state.isRunning) return;
 
-    const parsedTime = Number(textTime)
+    const parsedTime = Number(textTime);
     if (parsedTime > 0) {
-      setTime(parsedTime)
-      setIsRunning(true)
+      dispatch({ type: 'SET_TIME', payload: parsedTime });
+      dispatch({ type: 'START' });
     }
   }
 
   function handleCancelOrPause() {
-    if (isRunning && !isPaused) {
-      setIsPaused(true)
-      setIsRunning(false)
-      return
+    if (state.isRunning && !state.isPaused) {
+      dispatch({ type: 'PAUSE' });
+      return;
     }
 
-    if (isPaused || (!isRunning && textTime)) {
-      setIsRunning(false)
-      setIsPaused(false)
-      setTime(0)
-      setTextTime('')
+    if (state.isPaused || (!state.isRunning && textTime)) {
+      dispatch({ type: 'STOP' });
+      setTextTime('');
     }
+  }
+
+  function handleChangePower(value: number) {
+    dispatch({ type: 'SET_POWER', payload: value });
   }
 
   return (
@@ -82,7 +76,7 @@ export function Home() {
       <div className="border-l w-[280px] p-6">
         <div className="border rounded-md w-full h-24 flex items-center justify-center">
           <span className="font-bold text-neutral-500 dark:text-neutral-200 text-4xl">
-            {isRunning || isPaused ? secondsToHms(time) : textTime}
+            {state.isRunning || state.isPaused ? secondsToHms(state.time) : textTime}
           </span>
         </div>
 
@@ -92,19 +86,19 @@ export function Home() {
               key={index}
               size="lg"
               variant="secondary"
-              onClick={() => writeOnVisor(index + 1)}
+              onClick={() => handleDigitClick(index + 1)}
             >
               {index + 1}
             </Button>
           ))}
-          <Button size="lg" variant="secondary" onClick={() => writeOnVisor(0)}>
+          <Button size="lg" variant="secondary" onClick={() => handleDigitClick(0)}>
             0
           </Button>
           <Button size="lg" variant="outline" onClick={handleStartHeating}>
             Play
           </Button>
           <Button size="lg" variant="destructive" onClick={handleCancelOrPause}>
-            {isPaused ? 'Cancel' : 'Pause'}
+            {state.isPaused ? 'Cancel' : 'Pause'}
           </Button>
         </div>
 
@@ -114,11 +108,11 @@ export function Home() {
             className="mt-2"
             min={1}
             max={10}
-            value={power}
-            onValueChange={setPower}
+            value={[state.power]}
+            onValueChange={(value) => handleChangePower(value[0])}
           />
         </div>
       </div>
     </div>
-  )
+  );
 }
