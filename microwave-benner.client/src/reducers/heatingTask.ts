@@ -1,8 +1,9 @@
 interface HeatingTask {
-    power: number;
-    time: number;
-    isRunning: boolean;
-    isPaused: boolean;
+  id?: number;  
+  power: number;
+  time: number;
+  isRunning?: boolean;
+  isPaused?: boolean;
 }
 
 type HeatingTaskAction =
@@ -11,7 +12,8 @@ type HeatingTaskAction =
   | { type: 'RESUME' }
   | { type: 'STOP' }
   | { type: 'SET_TIME'; payload: number }
-  | { type: 'SET_POWER'; payload: number };
+  | { type: 'SET_POWER'; payload: number }
+  | { type: 'SET_TASK'; payload: HeatingTask };  // Atualizando HeatingTask completa, incluindo o id
 
 export function heatingTaskReducer(state: HeatingTask, action: HeatingTaskAction): HeatingTask {
   switch (action.type) {
@@ -27,6 +29,15 @@ export function heatingTaskReducer(state: HeatingTask, action: HeatingTaskAction
       return { ...state, time: action.payload };
     case 'SET_POWER':
       return { ...state, power: action.payload };
+    case 'SET_TASK':
+      return { 
+        ...state, 
+        id: action.payload.id,
+        power: action.payload.power, 
+        time: action.payload.time, 
+        isRunning: action.payload.isRunning, 
+        isPaused: action.payload.isPaused 
+      };
     default:
       return state;
   }

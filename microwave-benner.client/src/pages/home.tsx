@@ -54,8 +54,8 @@ export function Home() {
           // heatingProgramId: null, 
         });
 
+        dispatch({ type: 'SET_TASK', payload: heatingTaskResponse });
         dispatch({ type: 'START' });
-        console.log(heatingTaskResponse);
         
       } catch (err) {
         console.error('Erro ao iniciar aquecimento:', err);
