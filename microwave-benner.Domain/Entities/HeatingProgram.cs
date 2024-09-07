@@ -15,9 +15,8 @@ namespace microwave_benner.Domain.Entities
         public string? instructions { get; private set; }
         public bool custom { get; private set; }
 
-        public HeatingProgram(string name, string food, int time, int power, char heatingChar, string? instructions = null, bool custom = false)
+        public HeatingProgram(string name, string food, int time, int power, char heatingChar, string? instructions = null)
         {
-
             if (heatingChar == '.')
                 throw new ArgumentException("O caractere '.' é especial e não pode ser definido.");
 
@@ -27,13 +26,14 @@ namespace microwave_benner.Domain.Entities
             this.power = power;
             this.heatingChar = heatingChar;
             this.instructions = instructions;
-            this.custom = custom;
+            this.custom = true;
         }
 
         public HeatingProgram(int id, string name, string food, int time, int power, char heatingChar, string? instructions = null, bool custom = false)
-            : this(name, food, time, power, heatingChar, instructions, custom)
+        : this(name, food, time, power, heatingChar, instructions)
         {
             this.id = id;
+            this.custom = custom;
         }
     }
 }

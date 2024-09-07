@@ -21,14 +21,24 @@ namespace microwave_benner.Infra.Ioc
 
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
 
-            //Repositories
+            /*
+             * Repositories
+             */
             services.AddScoped<IHeatingTaskRepository, HeatingTaskRepository>();
+            services.AddScoped<IHeatingProgramRepository, HeatingProgramRepository>();
 
-            //Services - Use Cases
+            /*
+             * Services - Use Cases
+             */
+
+            //Tasks
             services.AddScoped<IStartHeatingTaskUseCase, StartHeatingTaskService>();
             services.AddScoped<IAddTimeToHeatingTaskUseCase, AddTimeToHeatingTaskService>();
             services.AddScoped<IPauseOrCancelHeatingTaskUseCase, PauseOrCancelHeatingTaskService>();
             services.AddScoped<IResumeHeatingTaskUseCase, ResumeHeatingTaskService>();
+
+            //Heating Programs
+            services.AddScoped<ICreateHeatingProgramUseCase, CreateHeatingProgramService>();
 
             return services;
         }
