@@ -10,6 +10,8 @@ namespace microwave_benner.Infra.Data.Context
         public DbSet<HeatingTask> HeatingTasks { get; set; }
         public DbSet<HeatingProgram> HeatingPrograms { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -26,6 +26,7 @@ namespace microwave_benner.Infra.Ioc
              */
             services.AddScoped<IHeatingTaskRepository, HeatingTaskRepository>();
             services.AddScoped<IHeatingProgramRepository, HeatingProgramRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             /*
              * Services - Use Cases
