@@ -19,6 +19,11 @@ Este projeto consiste na implementação de um micro-ondas digital utilizando co
 - [x] Nível 3 - Programas de aquecimento customizados
 - [x] Nível 4 - Web API
 
+## :bulb: Resolvendo o desafio
+No desenvolvimento do micro-ondas, adotei uma abordagem que se baseia na definição de duas entidades principais: `HeatingTask` e `HeatingProgram`. Essa abordagem permitiu uma gestão eficiente e controlar o estado das minhas "Tasks" através de endpoints, concentrando toda a lógica de negócios na API.
+
+<p align="center"><img width="100%" src="./docs/db-schema.png"></p>
+
 ## :pushpin: Requisitos
 - [Visual Studio Code](https://visualstudio.microsoft.com/vs/)
 - [Node.js](https://nodejs.org/en)
