@@ -20,6 +20,16 @@ namespace microwave_benner.Application.Services
 
         public async Task Execute(HeatingProgramDTO heatingProgramDTO)
         {
+            if (heatingProgramDTO.heatingChar == '.')
+            {
+                throw new ArgumentException("O caractere '.' é especial e não pode ser definido.");
+            }
+
+            if (await _heatingProgramRepository.ExistsHeatingChar(heatingProgramDTO.heatingChar))
+            {
+                throw new ArgumentException("A string de aquecimento deve ser única.");
+            }
+
             HeatingProgram heatingProgram = _mapper.Map<HeatingProgram>(heatingProgramDTO);
 
             await _heatingProgramRepository.Insert(heatingProgram);

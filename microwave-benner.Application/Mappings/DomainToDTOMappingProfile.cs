@@ -20,7 +20,7 @@ namespace microwave_benner.Application.Mappings
                     src.food!,
                     src.time ?? 0,
                     src.power ?? 0,
-                    src.heatingChar![0],
+                    src.heatingChar!,
                     src.instructions
                 ));
 

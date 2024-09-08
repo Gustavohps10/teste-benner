@@ -42,5 +42,11 @@ namespace microwave_benner.Infra.Data.Repositories
             _context.HeatingPrograms.Update(heatingProgram);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> ExistsHeatingChar(char heatingChar)
+        {
+            return await _context.HeatingPrograms
+                .AnyAsync(p => p.heatingChar == heatingChar);
+        }
     }
 }

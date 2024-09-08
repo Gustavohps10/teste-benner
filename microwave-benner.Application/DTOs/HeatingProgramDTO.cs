@@ -21,7 +21,7 @@ namespace microwave_benner.Application.DTOs
         [MaxLength(500, ErrorMessage = "O campo 'instructions' deve ter no máximo 500 caracteres.")]
         public string? instructions { get; set; }
 
-        [MaxLength(1, ErrorMessage = "O campo 'heatingChar' deve ter exatamente 1 caractere.")]
-        public string? heatingChar { get; set; }
+        [Required]
+        public char heatingChar { get; set; }
     }
 }
