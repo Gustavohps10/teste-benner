@@ -15,8 +15,8 @@ namespace microwave_benner.Server.Controllers
             _pauseOrCancelHeatingTaskService = pauseOrCancelHeatingTaskService;
         }
 
-        [HttpPost("pause")]
-        public async Task<IActionResult> Handle([FromBody] HeatingTaskDTO heatingTaskDTO)
+        [HttpPost("{id}/pause")]
+        public async Task<IActionResult> Handle(int id)
         {
             if (!ModelState.IsValid)
             {
@@ -25,7 +25,7 @@ namespace microwave_benner.Server.Controllers
 
             try
             {
-                await _pauseOrCancelHeatingTaskService.Execute(heatingTaskDTO);
+                await _pauseOrCancelHeatingTaskService.Execute(id);
                 return Ok();
             }
             catch (Exception ex)

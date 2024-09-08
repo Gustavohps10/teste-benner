@@ -19,14 +19,9 @@ namespace microwave_benner.Application.Services
             _heatingTaskRepository = heatingTaskRepository;
         }
 
-        public async Task Execute(HeatingTaskDTO heatingTaskDTO)
+        public async Task Execute(int id)
         {
-            if (!heatingTaskDTO.id.HasValue)
-            {
-                throw new ArgumentException("ID é necessário para pausar ou cancelar um aquecimento.");
-            }
-
-            HeatingTask heatingTask = await _heatingTaskRepository.GetById(heatingTaskDTO.id.Value);
+            HeatingTask heatingTask = await _heatingTaskRepository.GetById(id);
             if (heatingTask == null)
             {
                 throw new InvalidOperationException("Tarefa de aquecimento não encontrada.");

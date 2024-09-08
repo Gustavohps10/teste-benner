@@ -9,6 +9,6 @@ namespace microwave_benner.Application.UseCases
 {
     public interface IPauseOrCancelHeatingTaskUseCase
     {
-        Task Execute(HeatingTaskDTO heatingTaskDTO);
+        Task Execute(int id);
     }
 }

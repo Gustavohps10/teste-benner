@@ -1,10 +1,13 @@
-import { addTimeToHeatingTask } from '@/api/add-time-to-heating-task';
-import { pauseOrCancelHeatingTask } from '@/api/pause-or-cancel-heating-task';
-import { resumeHeatingTask } from '@/api/resume-heating-task';
-import { startHeatingTask } from '@/api/start-heating-task';
-import { getPrograms, GetProgramsResponse } from '@/api/get-programs';
-import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useEffect, useReducer, useState } from 'react'
+
+import { Program } from '@/@types/Program'
+import { addTimeToHeatingTask } from '@/api/add-time-to-heating-task'
+import { getPrograms, GetProgramsResponse } from '@/api/get-programs'
+import { pauseOrCancelHeatingTask } from '@/api/pause-or-cancel-heating-task'
+import { resumeHeatingTask } from '@/api/resume-heating-task'
+import { startHeatingTask } from '@/api/start-heating-task'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -13,34 +16,19 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-
+} from '@/components/ui/dialog'
+import { Slider } from '@/components/ui/slider'
 import {
   Table,
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-
-import { heatingTaskReducer } from '@/reducers/heatingTask';
-import { secondsToHms } from '@/utils/secondsToHms';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useReducer, useEffect, useState } from 'react';
-
-interface Program {
-  id: number;
-  name: string;
-  food: string;
-  time: number;
-  power: number;
-  heatingChar: string;
-  instructions: string;
-  custom: boolean;
-}
+} from '@/components/ui/table'
+import { heatingTaskReducer } from '@/reducers/heatingTask'
+import { secondsToHms } from '@/utils/secondsToHms'
 
 export function Home() {
   const [state, dispatch] = useReducer(heatingTaskReducer, {
@@ -48,158 +36,166 @@ export function Home() {
     time: 0,
     isRunning: false,
     isPaused: false,
-  });
-  console.log(state);
-  const [textTime, setTextTime] = useState('');
-  const [infoString, setInfoString] = useState('');
-  const [heatingChar, setHeatingChar] = useState('.');
+  })
+  console.log(state)
+  const [textTime, setTextTime] = useState('')
+  const [infoString, setInfoString] = useState('')
+  const [heatingChar, setHeatingChar] = useState('.')
 
-  const { mutateAsync: startHeatingTaskFn, isPending: isStarting, isError: startError, error: startErrorMsg } = useMutation({
-    mutationFn: startHeatingTask,
-  });
+  const { mutateAsync: startHeatingTaskFn, isPending: isStarting } =
+    useMutation({
+      mutationFn: startHeatingTask,
+    })
 
-  const { mutateAsync: pauseOrCancelHeatingTaskFn, isPending: isPausingOrCancelling, isError: pauseError, error: pauseErrorMsg } = useMutation({
+  const {
+    mutateAsync: pauseOrCancelHeatingTaskFn,
+    isPending: isPausingOrCancelling,
+  } = useMutation({
     mutationFn: pauseOrCancelHeatingTask,
-  });
+  })
 
-  const { mutateAsync: resumeHeatingTaskFn, isPending: isResuming, isError: resumeError, error: resumeErrorMsg } = useMutation({
+  const { mutateAsync: resumeHeatingTaskFn } = useMutation({
     mutationFn: resumeHeatingTask,
-  });
-  
-  const { mutateAsync: addTimeToHeatingTaskFn, isPending: isAddingTime, isError: addTimeError, error: addTimeErrorMsg } = useMutation({
+  })
+
+  const { mutateAsync: addTimeToHeatingTaskFn } = useMutation({
     mutationFn: addTimeToHeatingTask,
-  });
+  })
 
   const { data: programs } = useQuery<GetProgramsResponse>({
     queryKey: ['programs'],
-    queryFn: getPrograms
-  });
+    queryFn: getPrograms,
+  })
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: NodeJS.Timeout
     if (state.isRunning && !state.isPaused) {
       timer = setInterval(() => {
-        dispatch({ type: 'SET_TIME', payload: state.time - 1 });
+        dispatch({ type: 'SET_TIME', payload: state.time - 1 })
         if (state.time <= 1) {
-          clearInterval(timer);
-          dispatch({ type: 'STOP' });
-          setInfoString('Aquecimento concluído');
-          setTextTime('');
+          clearInterval(timer)
+          dispatch({ type: 'STOP' })
+          setInfoString('Aquecimento concluído')
+          setTextTime('')
         } else {
-          const charGroup = heatingChar.repeat(state.power) + ' ';
-          const formatedChars = charGroup.repeat(state.time - 1);
-          setInfoString(formatedChars);
+          const charGroup = heatingChar.repeat(state.power) + ' '
+          const formatedChars = charGroup.repeat(state.time - 1)
+          setInfoString(formatedChars)
         }
-      }, 1000);
+      }, 1000)
     }
 
-    return () => clearInterval(timer);
-  }, [state.isRunning, state.isPaused, state.time, state.power, heatingChar]);
+    return () => clearInterval(timer)
+  }, [state.isRunning, state.isPaused, state.time, state.power, heatingChar])
 
   async function handleStartHeating(programId?: number) {
     if (programId && !state.isRunning && !state.isPaused) {
       try {
-        const startheatingTaskResponse = await startHeatingTaskFn({ heatingProgramId: programId });
-        dispatch({ type: 'SET_TASK', payload: startheatingTaskResponse });
-        dispatch({ type: 'START' });
+        const startheatingTaskResponse = await startHeatingTaskFn({
+          heatingProgramId: programId,
+        })
+        dispatch({ type: 'SET_TASK', payload: startheatingTaskResponse })
+        dispatch({ type: 'START' })
       } catch (err) {
-        console.error('Erro ao iniciar aquecimento com programa de pré aquecimento:', err);
+        console.error(
+          'Erro ao iniciar aquecimento com programa de pré aquecimento:',
+          err,
+        )
       }
-  
-      return;
+
+      return
     }
 
     if (state.isPaused) {
       if (state.id) {
         try {
-          await resumeHeatingTaskFn(state.id);
-          dispatch({ type: 'RESUME' });
+          await resumeHeatingTaskFn(state.id)
+          dispatch({ type: 'RESUME' })
         } catch (err) {
-          console.error('Erro ao retomar aquecimento:', err);
+          console.error('Erro ao retomar aquecimento:', err)
         }
       }
-      return;
+      return
     }
 
     if (state.isRunning) {
       if (state.id) {
         try {
-          await addTimeToHeatingTaskFn(state.id);
-          dispatch({ type: 'SET_TIME', payload: state.time + 30 }); // Aqui adiciona 30 segundos
+          await addTimeToHeatingTaskFn(state.id)
+          dispatch({ type: 'SET_TIME', payload: state.time + 30 }) // Aqui adiciona 30 segundos
         } catch (err) {
-          console.error('Erro ao adicionar tempo ao aquecimento:', err);
+          console.error('Erro ao adicionar tempo ao aquecimento:', err)
         }
       }
-      return;
+      return
     }
 
-    const parsedTime = Number(textTime);
+    const parsedTime = Number(textTime)
     if (parsedTime > 0) {
-      dispatch({ type: 'SET_TIME', payload: parsedTime });
+      dispatch({ type: 'SET_TIME', payload: parsedTime })
 
       try {
         const startheatingTaskResponse = await startHeatingTaskFn({
           power: state.power,
           time: parsedTime,
-        });
+        })
 
-        dispatch({ type: 'SET_TASK', payload: startheatingTaskResponse });
-        dispatch({ type: 'START' });
+        dispatch({ type: 'SET_TASK', payload: startheatingTaskResponse })
+        dispatch({ type: 'START' })
       } catch (err) {
-        console.error('Erro ao iniciar aquecimento:', err);
+        console.error('Erro ao iniciar aquecimento:', err)
       }
     } else {
       try {
-        const startheatingTaskResponse = await startHeatingTaskFn({});
+        const startheatingTaskResponse = await startHeatingTaskFn({})
 
-        dispatch({ type: 'SET_TASK', payload: startheatingTaskResponse });
-        dispatch({ type: 'START' });
+        dispatch({ type: 'SET_TASK', payload: startheatingTaskResponse })
+        dispatch({ type: 'START' })
       } catch (err) {
-        console.error('Erro ao iniciar aquecimento com valores padrão:', err);
+        console.error('Erro ao iniciar aquecimento com valores padrão:', err)
       }
     }
   }
-  
-  
+
   async function handleCancelOrPause() {
     if (!state.id) {
-      setTextTime('');
-      return;
+      setTextTime('')
+      return
     }
 
     try {
       if (state.isRunning && !state.isPaused) {
-        await pauseOrCancelHeatingTaskFn(state.id);
-        dispatch({ type: 'PAUSE' });
-        return;
+        await pauseOrCancelHeatingTaskFn(state.id)
+        dispatch({ type: 'PAUSE' })
+        return
       }
 
       if (state.isPaused || (!state.isRunning && textTime)) {
-        await pauseOrCancelHeatingTaskFn(state.id); 
-        dispatch({ type: 'STOP' });
-        setTextTime('');
+        await pauseOrCancelHeatingTaskFn(state.id)
+        dispatch({ type: 'STOP' })
+        setTextTime('')
         setHeatingChar('.')
         setInfoString('')
       }
     } catch (err) {
-      console.error('Erro ao pausar ou cancelar aquecimento:', err);
+      console.error('Erro ao pausar ou cancelar aquecimento:', err)
     }
   }
 
   function handleChangePower(value: number) {
-    dispatch({ type: 'SET_POWER', payload: value });
+    dispatch({ type: 'SET_POWER', payload: value })
   }
 
   function handleDigitClick(digit: number) {
     if (!state.isRunning && !state.isPaused) {
-      setTextTime((prev) => prev + digit);
+      setTextTime((prev) => prev + digit)
     }
   }
 
   function handleProgramSelection(program: Program) {
-    if(!state.isRunning){
-      setHeatingChar(program.heatingChar);
-      handleStartHeating(program.id);
+    if (!state.isRunning) {
+      setHeatingChar(program.heatingChar)
+      handleStartHeating(program.id)
     }
   }
 
@@ -216,7 +212,9 @@ export function Home() {
       <div className="border-l w-[280px] p-6">
         <div className="border rounded-md w-full h-24 flex items-center justify-center">
           <span className="font-bold text-neutral-500 dark:text-neutral-200 text-4xl">
-            {state.isRunning || state.isPaused ? secondsToHms(state.time) : textTime}
+            {state.isRunning || state.isPaused
+              ? secondsToHms(state.time)
+              : textTime}
           </span>
         </div>
 
@@ -231,14 +229,32 @@ export function Home() {
               {index + 1}
             </Button>
           ))}
-          <Button size="lg" variant="secondary" onClick={() => handleDigitClick(0)}>
+          <Button
+            size="lg"
+            variant="secondary"
+            onClick={() => handleDigitClick(0)}
+          >
             0
           </Button>
-          <Button size="lg" variant="outline" onClick={() => handleStartHeating()} disabled={isStarting}>
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={() => handleStartHeating()}
+            disabled={isStarting}
+          >
             {isStarting ? 'Starting...' : state.isPaused ? 'Resume' : 'Play'}
           </Button>
-          <Button size="lg" variant="destructive" onClick={handleCancelOrPause} disabled={isPausingOrCancelling}>
-            {isPausingOrCancelling ? 'Pausing/Canceling...' : state.isPaused ? 'Cancel' : 'Pause'}
+          <Button
+            size="lg"
+            variant="destructive"
+            onClick={handleCancelOrPause}
+            disabled={isPausingOrCancelling}
+          >
+            {isPausingOrCancelling
+              ? 'Pausing/Canceling...'
+              : state.isPaused
+                ? 'Cancel'
+                : 'Pause'}
           </Button>
         </div>
 
@@ -255,15 +271,21 @@ export function Home() {
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button className='mt-4' variant="outline">Pré-configurados</Button>
+            <Button className="mt-4" variant="outline">
+              Pré-configurados
+            </Button>
           </DialogTrigger>
-          <DialogContent className={"lg:max-w-screen-lg overflow-y-scroll max-h-[95vh]"}>
+          <DialogContent
+            className={'lg:max-w-screen-lg overflow-y-scroll max-h-[95vh]'}
+          >
             <DialogHeader>
               <DialogTitle>Programas de aquecimento</DialogTitle>
-              <DialogDescription className='font-semibold'>
+              <DialogDescription className="font-semibold">
                 Selecione um programa de aquecimento
                 <Table>
-                  <TableCaption>Lista de programas pré-configurados.</TableCaption>
+                  <TableCaption>
+                    Lista de programas pré-configurados.
+                  </TableCaption>
                   <TableHeader>
                     <TableRow>
                       <TableHead className="w-[48px]">ID</TableHead>
@@ -277,14 +299,24 @@ export function Home() {
                   <TableBody>
                     {programs?.map((program) => (
                       <TableRow key={program.id}>
-                        <TableCell>{program.id}</TableCell>
-                        <TableCell>{program.name}</TableCell>
-                        <TableCell>{program.time} s</TableCell>
+                        <TableCell className="font-sm font-mono w-[100px] font-medium">
+                          {program.id}
+                        </TableCell>
+                        <TableCell className="text-secondary-foreground">
+                          {program.name}
+                        </TableCell>
+                        <TableCell className="font-sm font-mono">
+                          {secondsToHms(program.time)}
+                        </TableCell>
                         <TableCell>{program.power}</TableCell>
                         <TableCell>{program.instructions}</TableCell>
                         <TableCell>
                           <DialogClose asChild>
-                            <Button onClick={() => handleProgramSelection(program)}>Selecionar</Button>
+                            <Button
+                              onClick={() => handleProgramSelection(program)}
+                            >
+                              Selecionar
+                            </Button>
                           </DialogClose>
                         </TableCell>
                       </TableRow>
@@ -297,5 +329,5 @@ export function Home() {
         </Dialog>
       </div>
     </div>
-  );
+  )
 }

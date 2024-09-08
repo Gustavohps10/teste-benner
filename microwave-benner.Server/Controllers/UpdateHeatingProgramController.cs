@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace microwave_benner.Server.Controllers
 {
-    [Route("api/heatings")]
+    [Route("api/programs")]
     [ApiController]
     public class UpdateHeatingProgramController : ControllerBase
     {

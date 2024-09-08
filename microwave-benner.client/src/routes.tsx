@@ -4,6 +4,7 @@ import { AppLayout } from '@/pages/_layouts/app'
 import { Error } from '@/pages/error'
 import { Home } from '@/pages/home'
 import { NotFound } from '@/pages/not-found'
+import { Programs } from '@/pages/programs'
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ export const router = createBrowserRouter([
       {
         path: '/',
         element: <Home />,
+      },
+      {
+        path: '/programs',
+        element: <Programs />,
       },
     ],
   },

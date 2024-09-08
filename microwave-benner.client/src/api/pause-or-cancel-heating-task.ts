@@ -1,7 +1,5 @@
 import { api } from '@/lib/axios'
 
 export async function pauseOrCancelHeatingTask(id: number) {
-    await api.post('/heatings/pause', {
-    id
-  })
+  await api.post(`/heatings/${id}/pause`)
 }

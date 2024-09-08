@@ -14,7 +14,7 @@ namespace microwave_benner.Server.Controllers
             _resumeHeatingTaskService = resumeHeatingTaskService;
         }
 
-        [HttpPost("resume/{id}")]
+        [HttpPost("{id}/resume")]
         public async Task<IActionResult> ResumeHeatingTask(int id)
         {
             try

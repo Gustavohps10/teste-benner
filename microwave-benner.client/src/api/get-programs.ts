@@ -6,7 +6,7 @@ export type GetProgramsResponse = {
   food: string
   time: number
   power: number
-  heatingChar:string
+  heatingChar: string
   instructions: string
   custom: boolean
 }[]
