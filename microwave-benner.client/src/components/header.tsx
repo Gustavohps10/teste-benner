@@ -1,21 +1,25 @@
 import { Link } from 'react-router-dom'
 
+import logo from '@/assets/benner-logo.png'
+
 import { ToggleTheme } from './toggle-theme'
-import { Button } from './ui/button'
 
 export function Header() {
   return (
     <header className="shadow-md">
-      <div className="flex mx-auto max-w-[90rem] items-center py-4 gap-2 justify-between px-2">
-        <div className="flex">
-          <Link to="/">
-            <Button variant="link">Home</Button>
-          </Link>
-          <Link to="/programs">
-            <Button variant="link">Programas</Button>
-          </Link>
+      <div className="flex mx-auto max-w-[90rem] items-center py-4 gap-2 justify-between p-2">
+        <div>
+          <img src={logo} className="h-[48px]" alt="" />
         </div>
-        <ToggleTheme />
+        <div className="flex items-center gap-8">
+          <Link to="/" className="font-semibold ">
+            Home
+          </Link>
+          <Link to="/programs" className="font-semibold">
+            Programas
+          </Link>
+          <ToggleTheme />
+        </div>
       </div>
     </header>
   )

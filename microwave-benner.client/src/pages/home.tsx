@@ -200,133 +200,141 @@ export function Home() {
   }
 
   return (
-    <div className="border rounded-md w-[900px] h-[500px] mx-auto my-20 flex">
-      <div className="h-full flex-1 p-6">
-        <div className="border w-full h-full rounded-md p-4 overflow-y-auto">
-          <span className="font-bold text-neutral-500 dark:text-neutral-200 text-2xl">
-            {infoString}
-          </span>
-        </div>
-      </div>
-
-      <div className="border-l w-[280px] p-6">
-        <div className="border rounded-md w-full h-24 flex items-center justify-center">
-          <span className="font-bold text-neutral-500 dark:text-neutral-200 text-4xl">
-            {state.isRunning || state.isPaused
-              ? secondsToHms(state.time)
-              : textTime}
-          </span>
+    <div className="w-[95vw] rounded-2xl mx-auto bg-[#E7264E]">
+      <h1 className="mt-7 text-4xl text-white font-normal text-center ">
+        Super microondas Digital
+      </h1>
+      <h2 className="text-3xl text-neutral-200 font-light leading-tight text-center">
+        por Gustavo Henrique
+      </h2>
+      <div className="border rounded-lg w-[900px] h-[500px] mx-auto my-10 flex bg-white dark:bg-neutral-950">
+        <div className="h-full flex-1 p-6">
+          <div className="border w-full h-full rounded-md p-4 overflow-y-auto bg-neutral-50 dark:bg-neutral-900">
+            <span className="font-bold text-neutral-500 dark:text-neutral-200 text-2xl">
+              {infoString}
+            </span>
+          </div>
         </div>
 
-        <div className="grid grid-cols-3 justify-center gap-3 py-4">
-          {Array.from({ length: 9 }).map((_, index) => (
+        <div className="border-l w-[280px] p-6">
+          <div className="border rounded-md w-full h-24 flex items-center justify-center">
+            <span className="font-bold text-neutral-500 dark:text-neutral-200 text-4xl">
+              {state.isRunning || state.isPaused
+                ? secondsToHms(state.time)
+                : textTime}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-3 justify-center gap-3 py-4">
+            {Array.from({ length: 9 }).map((_, index) => (
+              <Button
+                key={index}
+                size="lg"
+                variant="secondary"
+                onClick={() => handleDigitClick(index + 1)}
+              >
+                {index + 1}
+              </Button>
+            ))}
             <Button
-              key={index}
               size="lg"
               variant="secondary"
-              onClick={() => handleDigitClick(index + 1)}
+              onClick={() => handleDigitClick(0)}
             >
-              {index + 1}
+              0
             </Button>
-          ))}
-          <Button
-            size="lg"
-            variant="secondary"
-            onClick={() => handleDigitClick(0)}
-          >
-            0
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            onClick={() => handleStartHeating()}
-            disabled={isStarting}
-          >
-            {isStarting ? 'Starting...' : state.isPaused ? 'Resume' : 'Play'}
-          </Button>
-          <Button
-            size="lg"
-            variant="destructive"
-            onClick={handleCancelOrPause}
-            disabled={isPausingOrCancelling}
-          >
-            {isPausingOrCancelling
-              ? 'Pausing/Canceling...'
-              : state.isPaused
-                ? 'Cancel'
-                : 'Pause'}
-          </Button>
-        </div>
-
-        <div>
-          <span className="text-muted-foreground text-sm">Potência</span>
-          <Slider
-            className="mt-2"
-            min={1}
-            max={10}
-            value={[state.power]}
-            onValueChange={(value) => handleChangePower(value[0])}
-          />
-        </div>
-
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="mt-4" variant="outline">
-              Pré-configurados
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => handleStartHeating()}
+              disabled={isStarting}
+            >
+              {isStarting ? 'Starting...' : state.isPaused ? 'Resume' : 'Play'}
             </Button>
-          </DialogTrigger>
-          <DialogContent
-            className={'lg:max-w-screen-lg overflow-y-scroll max-h-[95vh]'}
-          >
-            <DialogHeader>
-              <DialogTitle>Programas de aquecimento</DialogTitle>
-              <DialogDescription className="font-semibold">
-                Selecione um programa de aquecimento
-                <Table>
-                  <TableCaption>
-                    Lista de programas pré-configurados.
-                  </TableCaption>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[48px]">ID</TableHead>
-                      <TableHead>Nome</TableHead>
-                      <TableHead>Tempo</TableHead>
-                      <TableHead>Potência</TableHead>
-                      <TableHead>Instruções</TableHead>
-                      <TableHead></TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {programs?.map((program) => (
-                      <TableRow key={program.id}>
-                        <TableCell className="font-sm font-mono w-[100px] font-medium">
-                          {program.id}
-                        </TableCell>
-                        <TableCell className="text-secondary-foreground">
-                          {program.name}
-                        </TableCell>
-                        <TableCell className="font-sm font-mono">
-                          {secondsToHms(program.time)}
-                        </TableCell>
-                        <TableCell>{program.power}</TableCell>
-                        <TableCell>{program.instructions}</TableCell>
-                        <TableCell>
-                          <DialogClose asChild>
-                            <Button
-                              onClick={() => handleProgramSelection(program)}
-                            >
-                              Selecionar
-                            </Button>
-                          </DialogClose>
-                        </TableCell>
+            <Button
+              size="lg"
+              variant="destructive"
+              onClick={handleCancelOrPause}
+              disabled={isPausingOrCancelling}
+            >
+              {isPausingOrCancelling
+                ? 'Pausing/Canceling...'
+                : state.isPaused
+                  ? 'Cancel'
+                  : 'Pause'}
+            </Button>
+          </div>
+
+          <div>
+            <span className="text-muted-foreground text-sm">Potência</span>
+            <Slider
+              className="mt-2"
+              min={1}
+              max={10}
+              value={[state.power]}
+              onValueChange={(value) => handleChangePower(value[0])}
+            />
+          </div>
+
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="mt-4" variant="outline">
+                Pré-configurados
+              </Button>
+            </DialogTrigger>
+            <DialogContent
+              className={'lg:max-w-screen-lg overflow-y-scroll max-h-[95vh]'}
+            >
+              <DialogHeader>
+                <DialogTitle>Programas de aquecimento</DialogTitle>
+                <DialogDescription className="font-semibold">
+                  Selecione um programa de aquecimento
+                  <Table>
+                    <TableCaption>
+                      Lista de programas pré-configurados.
+                    </TableCaption>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-[48px]">ID</TableHead>
+                        <TableHead>Nome</TableHead>
+                        <TableHead>Tempo</TableHead>
+                        <TableHead>Potência</TableHead>
+                        <TableHead>Instruções</TableHead>
+                        <TableHead></TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+                    </TableHeader>
+                    <TableBody>
+                      {programs?.map((program) => (
+                        <TableRow key={program.id}>
+                          <TableCell className="font-sm font-mono w-[100px] font-medium">
+                            {program.id}
+                          </TableCell>
+                          <TableCell className="text-secondary-foreground">
+                            {program.name}
+                          </TableCell>
+                          <TableCell className="font-sm font-mono">
+                            {secondsToHms(program.time)}
+                          </TableCell>
+                          <TableCell>{program.power}</TableCell>
+                          <TableCell>{program.instructions}</TableCell>
+                          <TableCell>
+                            <DialogClose asChild>
+                              <Button
+                                onClick={() => handleProgramSelection(program)}
+                              >
+                                Selecionar
+                              </Button>
+                            </DialogClose>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
     </div>
   )
