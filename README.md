@@ -42,7 +42,7 @@ git clone https://github.com/<your-profile>/microwave-benner
 <img src="https://img.shields.io/static/v1?label=&message=React&colorA=2a2a2a&colorB=1a1a1e&logo=react&style=flat-square">
 <img src="https://img.shields.io/static/v1?label=&message=React Query&colorA=2a2a2a&colorB=1a1a1e&logo=react&style=flat-square">
 <img src="https://img.shields.io/static/v1?label=&message=TypeScript&colorA=2a2a2a&colorB=1a1a1e&logo=typescript&style=flat-square">
-<img src="https://img.shields.io/static/v1?label=&message=Shadcn UI&colorA=2a2a2a&colorB=1a1a1e&logo=react&style=flat-square">
+<img src="https://img.shields.io/static/v1?label=&message=Shadcn UI&colorA=2a2a2a&colorB=1a1a1e&logo=shadcnui&style=flat-square">
 <img src="https://img.shields.io/static/v1?label=&message=Tailwind&colorA=2a2a2a&colorB=1a1a1e&logo=tailwindcss&style=flat-square">
 </p>
 
@@ -55,6 +55,9 @@ git clone https://github.com/<your-profile>/microwave-benner
 <img src="https://img.shields.io/static/v1?label=&message=PostgreSQL&colorA=2a2a2a&colorB=1a1a1e&logo=postgresql&style=flat-square">
 
 </p>
+
+## :bookmark_tabs: Licença
+Este projeto está sob licença MIT. Consulte ```LICENSE``` para mais informações.
 
 ## :adult: Autores
 
