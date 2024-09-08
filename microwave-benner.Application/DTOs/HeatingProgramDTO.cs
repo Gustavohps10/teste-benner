@@ -22,6 +22,6 @@ namespace microwave_benner.Application.DTOs
         public string? instructions { get; set; }
 
         [Required]
-        public char heatingChar { get; set; }
+        public char? heatingChar { get; set; }
     }
 }

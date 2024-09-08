@@ -14,17 +14,7 @@ namespace microwave_benner.Application.Mappings
         public DomainToDTOMappingProfile()
         {
             CreateMap<HeatingTask, HeatingTaskDTO>().ReverseMap();
-            CreateMap<HeatingProgramDTO, HeatingProgram>()
-                .ConstructUsing(src => new HeatingProgram(
-                    src.name!,
-                    src.food!,
-                    src.time ?? 0,
-                    src.power ?? 0,
-                    src.heatingChar!,
-                    src.instructions
-                ));
-
-            CreateMap<HeatingProgram, HeatingProgramDTO>();
+            CreateMap<HeatingProgramDTO, HeatingProgram>().ReverseMap();
         }
     }
 }
