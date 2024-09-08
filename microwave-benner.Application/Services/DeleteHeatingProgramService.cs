@@ -22,6 +22,11 @@ namespace microwave_benner.Application.Services
                 throw new ArgumentException("Programa de aquecimento não encontrado.");
             }
 
+            if (!heatingProgram.custom)
+            {
+                throw new InvalidOperationException("Programas pré-definidos não podem ser excluídos.");
+            }
+
             await _heatingProgramRepository.Delete(id);
         }
     }

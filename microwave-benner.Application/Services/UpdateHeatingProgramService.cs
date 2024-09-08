@@ -42,9 +42,13 @@ public class UpdateHeatingProgramService : IUpdateHeatingProgramUseCase
             throw new ArgumentException("Programa de aquecimento não encontrado.");
         }
 
+        if (!heatingProgram.custom)
+        {
+            throw new InvalidOperationException("Programas pré-definidos não podem ser alterados.");
+        }
+
         _mapper.Map(heatingProgramDTO, heatingProgram);
 
         await _heatingProgramRepository.Update(heatingProgram);
     }
-
 }
