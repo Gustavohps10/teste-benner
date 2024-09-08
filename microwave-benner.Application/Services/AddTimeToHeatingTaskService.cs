@@ -27,6 +27,11 @@ namespace microwave_benner.Application.Services
                 throw new InvalidOperationException("Tarefa de aquecimento não encontrada.");
             }
 
+            if (heatingTask.heatingProgramId.HasValue)
+            {
+                throw new InvalidOperationException("Não é permitido acrescer tempo a programas pré-definidos.");
+            }
+
             heatingTask.AddTime(); 
             await _heatingTaskRepository.Update(heatingTask);
 
