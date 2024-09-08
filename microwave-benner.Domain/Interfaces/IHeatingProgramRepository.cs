@@ -11,5 +11,6 @@ namespace microwave_benner.Domain.Interfaces
         Task Insert(HeatingProgram heatingProgram);
         Task Update(HeatingProgram heatingProgram);
         Task<bool> ExistsHeatingChar(char heatingChar);
+        Task Delete(int id);
     }
 }

@@ -48,5 +48,17 @@ namespace microwave_benner.Infra.Data.Repositories
             return await _context.HeatingPrograms
                 .AnyAsync(p => p.heatingChar == heatingChar);
         }
+
+        public async Task Delete(int id)
+        {
+            var heatingProgram = await _context.HeatingPrograms.FindAsync(id);
+            if (heatingProgram == null)
+            {
+                throw new KeyNotFoundException("Programa de aquecimento não encontrado.");
+            }
+
+            _context.HeatingPrograms.Remove(heatingProgram);
+            await _context.SaveChangesAsync();
+        }
     }
 }
