@@ -1,0 +1,17 @@
+# Imagem base do .NET SDK
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+
+# Copia os arquivos do projeto para dentro do contêiner
+COPY microwave-benner.Infra.Data/microwave-benner.Infra.Data.csproj ./microwave-benner.Infra.Data/
+COPY microwave-benner.Server/microwave-benner.Server.csproj ./microwave-benner.Server/
+
+# Restaura as dependências dos projetos
+RUN dotnet restore ./microwave-benner.Infra.Data/microwave-benner.Infra.Data.csproj
+
+# Copia os arquivos restantes
+COPY microwave-benner.Infra.Data/ ./microwave-benner.Infra.Data/
+COPY microwave-benner.Server/ ./microwave-benner.Server/
+
+# Executa as migrações
+ENTRYPOINT ["dotnet", "ef", "database", "update", "--project", "/app/microwave-benner.Infra.Data/microwave-benner.Infra.Data.csproj", "--startup-project", "/app/microwave-benner.Server/microwave-benner.Server.csproj"]

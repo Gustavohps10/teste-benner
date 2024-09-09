@@ -13,9 +13,12 @@ namespace microwave_benner.Infra.Ioc
     public static class DependencyInjection
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config) {
+            var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION")
+                ?? config.GetConnectionString("DefaultConnection");
+
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseNpgsql(config.GetConnectionString("DefaultConnection"),
+                options.UseNpgsql(connectionString,
                     b=>b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
             });
 
