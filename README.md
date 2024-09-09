@@ -21,6 +21,7 @@ Este projeto consiste na implementação de um micro-ondas digital utilizando co
 
 ## :bulb: Resolvendo o desafio
 No desenvolvimento do micro-ondas, adotei uma abordagem que se baseia na definição de duas entidades principais: `HeatingTask` e `HeatingProgram`. Essa abordagem permitiu controlar o estado das minhas "Tasks" através de endpoints, concentrando toda a lógica de negócios na API.
+Com um pouco mais de tempo, seria possível implementar mais funcionalidades e melhorias, por exemplo: mensagens de erro customizadas, login com JWT, tratamento de exceptions, etc...
 
 <p align="center"><img width="100%" src="./docs/db-schema.png"></p>
 
@@ -35,6 +36,7 @@ Faça o [Download](https://github.com/Gustavohps10/microwave-benner/archive/refs
 git clone https://github.com/<your-profile>/microwave-benner
 ```
 ### Database
+❗ Não se preocupe, a aplicação utilizará valores padrão se variaveis de ambiente não setadas
 Inicie o banco de dados PostgreSQL
 ```
 docker-compose up -d db
