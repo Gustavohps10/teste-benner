@@ -36,7 +36,8 @@ Faça o [Download](https://github.com/Gustavohps10/microwave-benner/archive/refs
 git clone https://github.com/<your-profile>/microwave-benner
 ```
 ### Database
-❗ Não se preocupe, a aplicação utilizará valores padrão se variaveis de ambiente não setadas
+❗ Não se preocupe, a aplicação utilizará valores padrão se variaveis de ambiente não forem setadas
+
 Inicie o banco de dados PostgreSQL
 ```
 docker-compose up -d db
@@ -51,9 +52,18 @@ Inicie a API e o client em React
 ```
 dotnet run --project ./microwave-benner.Server/microwave-benner.Server.csproj
 ```
-Abra no seu navegador `http://localhost:5173/` e voilà
+Abra no seu navegador http://localhost:5173 e voilà
 
+Para acessar o Swagger http://localhost:5000/swagger/
 
+## Capturas de tela
+- Selecionar programa de aquecimento
+  <p align="center"><img width="100%" src="./docs/selecionar-programa.png"></p>
+- Cadastro de programas de aquecimento
+  <p align="center"><img width="100%" src="./docs/listar.png"></p>
+- Formulário de cadastro
+  <p align="center"><img width="100%" src="./docs/cadastrar.png"></p>
+  
 ## :hammer_and_wrench: Ferramentas utilizadas
 #### Frontend
 <p>
