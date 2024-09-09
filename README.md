@@ -20,7 +20,8 @@ Este projeto consiste na implementação de um micro-ondas digital utilizando co
 - [x] Nível 4 - Web API
 
 ## :bulb: Resolvendo o desafio
-No desenvolvimento do micro-ondas, adotei uma abordagem que se baseia na definição de duas entidades principais: `HeatingTask` e `HeatingProgram`. Essa abordagem permitiu uma gestão eficiente e controlar o estado das minhas "Tasks" através de endpoints, concentrando toda a lógica de negócios na API.
+No desenvolvimento do micro-ondas, adotei uma abordagem que se baseia na definição de duas entidades principais: `HeatingTask` e `HeatingProgram`. Essa abordagem permitiu controlar o estado das minhas "Tasks" através de endpoints, concentrando toda a lógica de negócios na API.
+Com um pouco mais de tempo, seria possível implementar mais funcionalidades e melhorias, por exemplo: mensagens de erro customizadas, login com JWT, tratamento de exceptions, etc...
 
 <p align="center"><img width="100%" src="./docs/db-schema.png"></p>
 
@@ -28,13 +29,30 @@ No desenvolvimento do micro-ondas, adotei uma abordagem que se baseia na defini�
 - [Visual Studio Code](https://visualstudio.microsoft.com/vs/)
 - [Node.js](https://nodejs.org/en)
 
-## :gear: Rodando
+## :gear: Rodando localmente
 
-### Clonando
-Faça o Fork e clone este repositório
+Faça o [Download](https://github.com/Gustavohps10/microwave-benner/archive/refs/heads/main.zip) ou bifurque e clone este repositório
 ```
 git clone https://github.com/<your-profile>/microwave-benner
 ```
+### Database
+❗ Não se preocupe, a aplicação utilizará valores padrão se variaveis de ambiente não setadas
+Inicie o banco de dados PostgreSQL
+```
+docker-compose up -d db
+```
+Você também vai precisar aplicar as migrations com Entity Framework
+```
+dotnet ef database update --project ./microwave-benner.Infra.Data/microwave-benner.Infra.Data.csproj --startup-project ./microwave-benner.Server/microwave-benner.Server.csproj
+```
+
+### Executando Frontend e Backend
+Inicie a API e o client em React 
+```
+dotnet run --project ./microwave-benner.Server/microwave-benner.Server.csproj
+```
+Abra no seu navegador `http://localhost:5173/` e voilà
+
 
 ## :hammer_and_wrench: Ferramentas utilizadas
 #### Frontend
