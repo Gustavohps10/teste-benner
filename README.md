@@ -44,6 +44,10 @@ docker-compose up -d db
 ```
 Você também vai precisar aplicar as migrations com Entity Framework
 ```
+docker-compose run migrate
+```
+ou
+```
 dotnet ef database update --project ./microwave-benner.Infra.Data/microwave-benner.Infra.Data.csproj --startup-project ./microwave-benner.Server/microwave-benner.Server.csproj
 ```
 
@@ -58,9 +62,9 @@ ou
 ```
 dotnet run --project ./microwave-benner.Server/microwave-benner.Server.csproj
 ```
-Abra no seu navegador http://localhost:5173 e voilà
+> Abra no seu navegador http://localhost:5173 e voilà
 
-Para acessar o Swagger http://localhost:5000/swagger/
+> Para acessar o Swagger http://localhost:5000/swagger/
 
 ## Capturas de tela
 - Selecionar programa de aquecimento
