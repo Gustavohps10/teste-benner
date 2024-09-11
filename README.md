@@ -50,6 +50,12 @@ dotnet ef database update --project ./microwave-benner.Infra.Data/microwave-benn
 ### Executando Frontend e Backend
 Inicie a API e o client em React 
 ```
+docker-compose up api client
+```
+
+ou
+
+```
 dotnet run --project ./microwave-benner.Server/microwave-benner.Server.csproj
 ```
 Abra no seu navegador http://localhost:5173 e voilà
