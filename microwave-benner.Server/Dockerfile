@@ -1,8 +1,6 @@
-# Dockerfile for ASP.NET Core Application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Copy project files and restore dependencies
 COPY microwave-benner.Server/microwave-benner.Server.csproj ./microwave-benner.Server/
 COPY microwave-benner.Application/microwave-benner.Application.csproj ./microwave-benner.Application/
 COPY microwave-benner.Domain/microwave-benner.Domain.csproj ./microwave-benner.Domain/

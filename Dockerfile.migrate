@@ -1,17 +1,24 @@
-# Imagem base do .NET SDK
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS migrations
+
 WORKDIR /app
 
-# Copia os arquivos do projeto para dentro do contêiner
-COPY microwave-benner.Infra.Data/microwave-benner.Infra.Data.csproj ./microwave-benner.Infra.Data/
 COPY microwave-benner.Server/microwave-benner.Server.csproj ./microwave-benner.Server/
+COPY microwave-benner.Application/microwave-benner.Application.csproj ./microwave-benner.Application/
+COPY microwave-benner.Domain/microwave-benner.Domain.csproj ./microwave-benner.Domain/
+COPY microwave-benner.Infra.Data/microwave-benner.Infra.Data.csproj ./microwave-benner.Infra.Data/
+COPY microwave-benner.Infra.Ioc/microwave-benner.Infra.Ioc.csproj ./microwave-benner.Infra.Ioc/
 
-# Restaura as dependências dos projetos
-RUN dotnet restore ./microwave-benner.Infra.Data/microwave-benner.Infra.Data.csproj
+RUN dotnet restore ./microwave-benner.Server/microwave-benner.Server.csproj
 
-# Copia os arquivos restantes
-COPY microwave-benner.Infra.Data/ ./microwave-benner.Infra.Data/
 COPY microwave-benner.Server/ ./microwave-benner.Server/
+COPY microwave-benner.Application/ ./microwave-benner.Application/
+COPY microwave-benner.Domain/ ./microwave-benner.Domain/
+COPY microwave-benner.Infra.Data/ ./microwave-benner.Infra.Data/
+COPY microwave-benner.Infra.Ioc/ ./microwave-benner.Infra.Ioc/
 
-# Executa as migrações
-ENTRYPOINT ["dotnet", "ef", "database", "update", "--project", "/app/microwave-benner.Infra.Data/microwave-benner.Infra.Data.csproj", "--startup-project", "/app/microwave-benner.Server/microwave-benner.Server.csproj"]
+RUN dotnet build ./microwave-benner.Server/microwave-benner.Server.csproj -c Release
+
+RUN dotnet tool install --global dotnet-ef --version 8.0.0
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+ENTRYPOINT ["dotnet-ef", "database", "update", "--project", "./microwave-benner.Infra.Data/microwave-benner.Infra.Data.csproj", "--startup-project", "./microwave-benner.Server/microwave-benner.Server.csproj"]

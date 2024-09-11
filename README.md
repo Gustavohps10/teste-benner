@@ -1,4 +1,3 @@
-
 <h1 align="center"><div align="center"><img height="70" src="./docs/benner-logo.png" /></div>Teste para Desenvolvedor Trainee</h1>
 
 <p align="center">
@@ -11,48 +10,68 @@
 <p align="center"><img width="100%" src="./docs/screenshot.png"></p>
 
 ## :page_with_curl: Descrição
+
 Este projeto consiste na implementação de um micro-ondas digital utilizando conceitos de orientação a objetos e C# (.NET Framework 4.0 ou superior). O desenvolvimento está estruturado em níveis de dificuldade, onde cada nível expande as funcionalidades anteriores, atendendo a requisitos obrigatórios e desejáveis, como a aplicação dos princípios SOLID e boas práticas de código.
 
 ## :dart: Níveis
+
 - [x] Nível 1 - UI do Microondas
 - [x] Nível 2 - Programas de aquecimento pré-definidos
 - [x] Nível 3 - Programas de aquecimento customizados
 - [x] Nível 4 - Web API
 
 ## :bulb: Resolvendo o desafio
+
 No desenvolvimento do micro-ondas, adotei uma abordagem que se baseia na definição de duas entidades principais: `HeatingTask` e `HeatingProgram`. Essa abordagem permitiu controlar o estado das minhas "Tasks" através de endpoints, concentrando toda a lógica de negócios na API.
 Com um pouco mais de tempo, seria possível implementar mais funcionalidades e melhorias, por exemplo: mensagens de erro customizadas, login com JWT, tratamento de exceptions, etc...
 
 <p align="center"><img width="100%" src="./docs/db-schema.png"></p>
 
 ## :pushpin: Requisitos
+
 - [Visual Studio Code](https://visualstudio.microsoft.com/vs/)
 - [Node.js](https://nodejs.org/en)
 
 ## :gear: Rodando localmente
 
 Faça o [Download](https://github.com/Gustavohps10/microwave-benner/archive/refs/heads/main.zip) ou bifurque e clone este repositório
+
 ```
 git clone https://github.com/<your-profile>/microwave-benner
 ```
+
+### Com um comando Docker
+
+```
+docker-compose up
+```
+
 ### Database
+
 ❗ Não se preocupe, a aplicação utilizará valores padrão se variaveis de ambiente não forem setadas
 
 Inicie o banco de dados PostgreSQL
+
 ```
 docker-compose up -d db
 ```
+
 Você também vai precisar aplicar as migrations com Entity Framework
+
 ```
 docker-compose run migrate
 ```
+
 ou
+
 ```
 dotnet ef database update --project ./microwave-benner.Infra.Data/microwave-benner.Infra.Data.csproj --startup-project ./microwave-benner.Server/microwave-benner.Server.csproj
 ```
 
 ### Executando Frontend e Backend
-Inicie a API e o client em React 
+
+Inicie a API e o client em React
+
 ```
 docker-compose up api client
 ```
@@ -62,20 +81,24 @@ ou
 ```
 dotnet run --project ./microwave-benner.Server/microwave-benner.Server.csproj
 ```
+
 > Abra no seu navegador http://localhost:5173 e voilà
 
 > Para acessar o Swagger http://localhost:5000/swagger/
 
 ## Capturas de tela
+
 - Selecionar programa de aquecimento
   <p align="center"><img width="100%" src="./docs/selecionar-programa.png"></p>
 - Cadastro de programas de aquecimento
   <p align="center"><img width="100%" src="./docs/listar.png"></p>
 - Formulário de cadastro
   <p align="center"><img width="100%" src="./docs/cadastrar.png"></p>
-  
+
 ## :hammer_and_wrench: Ferramentas utilizadas
+
 #### Frontend
+
 <p>
 <img src="https://img.shields.io/static/v1?label=&message=React&colorA=2a2a2a&colorB=1a1a1e&logo=react&style=flat-square">
 <img src="https://img.shields.io/static/v1?label=&message=React Query&colorA=2a2a2a&colorB=1a1a1e&logo=react&style=flat-square">
@@ -85,6 +108,7 @@ dotnet run --project ./microwave-benner.Server/microwave-benner.Server.csproj
 </p>
 
 #### Backend
+
 <p>
 <img src="https://img.shields.io/static/v1?label=&message=Visual%20Studio%202022&colorA=2a2a2a&colorB=1a1a1a&style=flat-square&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAJbUExURQAAAHFRqG5Ppc6X+HFRqdKb/c2Y96x94Kx+4Ilgua5/5JFpx3FRqoZhvn5cuJ5z1ptx05xx1cKO8buM65lv0ZZtz76L7W9Qp31bsvOz/3JSqm5PpY1mvtKb/NKa/Kx936x94Kx94HFRqXJSqtGa/NGa/NGa/M6Y+baG6K1+4ax94Kt94Kp833FRqXFRqXJSqtCZ+9CZ+1k/iYpkvKt836p836p835tx0XBRqHJSqs+Y+8+Y+11CjmFFkql73p5z03ZVrm5PpY9ov86X+s6X+s6X+l5Dj11CjmNHlJpwzql7325Ppq1/3M2X+cyW+cyW+V1Cjl5Dj11CjXpYrKd63XlXsGFFmsyW+cuV+MuV+MuV+F1CjmNHl35btKB12J1y1sqV98qU98qU98qU919DkG1OpHFRqJ1z1biH6MmU9siT9siT9l5Dj3FRqIhivqJ22pxx06Z518eS9ceS9ceS9VxCjWlLnXFRqXFRqXFRqXhWsKF12aB02MaR9MWR9HRTrXFRqXFRqXFRqXFRqaB02J90155z18SQ88SQ83FRqHFRqXFRqZ5z1p1y1sKP8sOP8sOP8sKP8Jxy1phu0aF21cGO8cGO8Zhu0Zxx0sqV9m5PpY5ov45nvtCZ+9CZ/Kt94HJSqo1nvs+Y+s+Y+4xmv6p836l733FRqc6X+qd63aZ53JVsy3ZVrsyW+ad53aV43JVszMuV+J1y06R326N32sqU935btJ9z1aJ22aF12ciT9mlLnqB12MeS9Z902Jtw0qN31cWR9MaR9Jpw0aJ31cSQ85lv0aJ21P///5TQEPcAAACadFJOUwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALDgCJcfmeBECJQ8XtPu5OgEJbuGdEwyc/uJCGJv4/aQcgvr6YVz5/M/x/vP++mFh+/rj/cCH/PphYfvzZ8/FIFr++mHzZ8/FIFr++mH64/3Ah/z6Yfn80PH98/76YRib+P2kHIL6+mEKbuGdEwyc/uJCAiUPF7P7ujoBJcfmeBIrOQLq5W8ZAAAAAWJLR0TIHbpXygAAAAd0SU1FB+gHFRcXMa4QeasAAAEESURBVBjTY2CAAkYmcQlJZgY4YGSRkpaRlWNlY2Bgl1dQ5OBkUVKeNVtFVU2dgUtDU0tbh1tXT3/WnLnzDAwZjIxN5puamVtYLpi1cNFiK2sGG9slS5fZ2TssX+Do5LzCxZXBzd3D02vlqtVrlnv7+K7182cICAwKDlm3av2G0LDwiI2RUUCB6JjYTes3b4mLT0jcmpQM1JKSmrZt+5YdO9MzMndlZTPY5OxeviA3L3/nnoLCor3FJQylZeULKiqrqmv27T9w8FBtHQNPfUNjUzNvS2vb4SNHj7Z3AH3R2dXNwsff03vseF//hIkwzwkITpo8Zeo0IWG4d0VEp8+YKcbAAAAgIVceL5oGgQAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyNC0wNy0yMVQyMzoyMzo0OCswMDowMDgNldMAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjQtMDctMjFUMjM6MjM6NDgrMDA6MDBJUC1vAAAAKHRFWHRkYXRlOnRpbWVzdGFtcAAyMDI0LTA3LTIxVDIzOjIzOjQ4KzAwOjAwHkUMsAAAAABJRU5ErkJggg==">
     <img src="https://img.shields.io/static/v1?label=&message=C%23%20-%20ASP.NET Core&colorA=2a2a2a&colorB=1a1a1e&style=flat-square&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAMAAABl5a5YAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAJeUExURQAAAKB53KB43KB425F23CwFbDIKci0FbSsDazkSeCgAaDgReKB43KB43KB43KB43KB43KB43KB43KB43KB43KB426B43KB43KB43KB43KB43KF53KB426B426F53KB43KB43KB43KF53KB526F53KuE46B426F53Jty13dJvqF52zwEk6F52zkAkToBkZtz1jgAj1MrkS0FbSkAai8BeCAAXygAaCgAaCgAaCgBaCgCZjAJcCoCaigAaCcAZycAZygAaCoCaiwEbCkBaSgAaCcAZycAZygAaCkBaSsDaykBaSgAaCgAaCkBaSsDa6B4259326N83KiE3qN83aB326aB3sat6ePX9O/o+e/p+eTZ9cix6qiD3q2K4OLW9P39/v////79/uXa9a+O4aF53KaA3uHU9Pf1/Pf0/OLW84pgylYhpsOq6P38/vn2/M+77bGR4rGQ4s247N7U7IlnvUIMljcAj6J73ODS89G97Zdu1YdgwWI2qHJJsHJKsE0anOzk+Pn3/LSU46F43Zx013xOwE4ZoTcAkGpArK6X0q2V0XNLsfn3/bKS4YJZv04ljDAEdzMAhjYAjmpBrK2W0d/S87GezzILcSMAZCQAZSoDa2pFomY6qmtBrUkVmqF43L2k4/v6/PHv9ZWBtFEwhE8ug496sO/s8+Tc8I9vwEAKkzgAkXlRtk4oibmszv39/fDt9O/s9P38/cC10zkPejMAg0Iferquz/z8/cK21EgmfiYAZjQPcHlgobyv0NjR5NnS5L+z0n5npTcTciUAZiwFazgTcy0GayYAZwAAAKxPv4cAAABPdFJOUwAAAAAAAAAAAAAAABF05uVyEAZHufi3RQUBLp3x8JstG33i4Xoawv38v/z6/vz8/frB/Py9Gnrh4HgZAS2b8O+YKwVFt/j3tUMQceTibw8C5FlJAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+gHFRcZFHuXgGIAAAEtSURBVBjTY2BgYGBk4uHl4xcQZGZiAAEWJiFhEVF/f1ExcQmQCJOklLRMQGBQUHCArJy8JBODgqJSSGhYeERkVHRMiLKKKoOaekhsXHwCECQmJadoaDJo+aemATnpGUDBzKxsbQadgJzchLz8gsKijOKS0jJdBv/yioSESv+QlKrqmtq6eqBAaENCY1NzS2tbe0dnV7ceWKCnt69/wsRJkzungATKpyYkTJs+Y+as2XPmzp2ny5Ayf8HChEWLlyxdtnzFylWrdRn016xdl5CwfsPGTQkJm7dsNWAwNJq5bftCkMN27Ny129iEwdTMfPeevfv2Hzh46PBuC0srBlZrG1u7I0ePHTt+xN7BkY0d6F8OJ2cX1xMn3Nw9nDjAAcLAyeXp5e3j68fFDeQAANvMZsGUmjTQAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDI0LTA3LTIxVDIzOjI1OjIwKzAwOjAwwJOidAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyNC0wNy0yMVQyMzoyNToyMCswMDowMLHOGsgAAAAodEVYdGRhdGU6dGltZXN0YW1wADIwMjQtMDctMjFUMjM6MjU6MjArMDA6MDDm2zsXAAAAAElFTkSuQmCC" />
@@ -95,7 +119,8 @@ dotnet run --project ./microwave-benner.Server/microwave-benner.Server.csproj
 </p>
 
 ## :bookmark_tabs: Licença
-Este projeto está sob licença MIT. Consulte ```LICENSE``` para mais informações.
+
+Este projeto está sob licença MIT. Consulte `LICENSE` para mais informações.
 
 ## :adult: Autores
 
